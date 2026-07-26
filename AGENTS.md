@@ -52,7 +52,7 @@ Target collision (`newfile`/`backup`): never overwrite an existing target — us
 Leading positional arguments are one-off semantic targets that augment the five-category scan. Quote multi-word targets and place every target before the first flag:
 
 ```bash
-/hiding "data sources" "internal review rules" --files report.md
+/hide "data sources" "internal review rules" --files report.md
 ```
 
 | Flag | Effect |

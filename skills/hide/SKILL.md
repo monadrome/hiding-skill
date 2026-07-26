@@ -1,14 +1,14 @@
 ---
-name: hiding
+name: hide
 description: Strategically remove AI leakage, provenance clues, exposed constraints, credentials, and any user-specified content from files without changing executable behavior. Use for concealment or release hygiene. Triggers include clean AI traces, hide source, hide constraints, 隐藏 AI 痕迹、清理规则、隐藏数据来源、隐藏约束、清理 xxx 痕迹。
 argument-hint: "[<what-to-hide>...] [--files <file>...|session|worktree] [options]"
 metadata:
   author: HuaTalk
-  version: "0.8.1"
+  version: "0.9.0"
   category: output-discipline
 ---
 
-# /hiding
+# /hide
 
 **Scope**: Code, config, markdown, and documentation files only. Agent replies and conversation output are out of scope.
 
@@ -28,7 +28,7 @@ metadata:
 ## Usage
 
 ```
-/hiding [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
+/hide [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
 ```
 
 | Input | Values | Default | Description |

@@ -12,7 +12,7 @@ Hiding is a strategic content-cleanup Skill for coding agents. Use it whenever a
 
 ## Quickstart
 
-Install `/hiding` from npm:
+Install `/hide` from npm:
 
 ```bash
 npm install -D @huatalk/hiding-skill
@@ -22,20 +22,20 @@ npx skills-npm setup
 Then ask your agent to preview files changed in the current session:
 
 ```text
-/hiding --dry-run
+/hide --dry-run
 ```
 
 Review the findings, then apply the cleanup:
 
 ```text
-/hiding
+/hide
 ```
 
 Choose another scope when needed: [specific files](#specific-files), [the Git worktree](#git-worktree), or [additional content to hide](#semantic-targets).
 
 ## How It Works
 
-`/hiding` runs on demand after content exists, not throughout the agent's normal reasoning process. The target may be a draft, an existing file, a review or handoff artifact, or release-ready output.
+`/hide` runs on demand after content exists, not throughout the agent's normal reasoning process. The target may be a draft, an existing file, a review or handoff artifact, or release-ready output.
 
 For automatic `session` and `worktree` scopes, it resolves which files are user-facing outputs and excludes agent control state, planning metadata, build output, and unrelated files.
 
@@ -95,7 +95,7 @@ Then install the plugin in a separate prompt:
 /plugin install hiding@hiding
 ```
 
-Restart Claude Code after installation.
+Restart Claude Code after installation. The native plugin command is `/hiding:hide`; the shorter `/hide` also works when no other command uses that name.
 
 ## The Basic Workflow
 
@@ -106,7 +106,7 @@ Restart Claude Code after installation.
 5. **Clean** - Remove the smallest coherent comment or prose unit. Executable code, string literals, and behavior-affecting values are not silently changed.
 6. **Verify** - Re-read the candidate, validate structure, check for concurrent edits, then apply the selected output mode.
 
-When there are no findings in direct file modes, `/hiding` stays silent. Security warnings, previews, validation failures, and input errors remain visible.
+When there are no findings in direct file modes, `/hide` stays silent. Security warnings, previews, validation failures, and input errors remain visible.
 
 ## What's Inside
 
@@ -127,7 +127,7 @@ These are judgment principles, not a keyword list. `TODO`, `FIXME`, and `HACK` a
 Leading positional arguments add one-off content goals to the built-in scan:
 
 ```text
-/hiding "data sources" "internal project name" --files report.md --dry-run
+/hide "data sources" "internal project name" --files report.md --dry-run
 ```
 
 Targets are semantic phrases, not regular expressions. They must appear before the first flag. Matches in executable code, identifiers, or behavior-affecting configuration are reported for human review rather than modified automatically.
@@ -137,8 +137,8 @@ Targets are semantic phrases, not regular expressions. They must appear before t
 #### Current Session
 
 ```text
-/hiding
-/hiding --files session --dry-run
+/hide
+/hide --files session --dry-run
 ```
 
 The default scope is files created or modified through file-editing tools in the current agent session. Git status may provide context but does not expand this inventory.
@@ -146,7 +146,7 @@ The default scope is files created or modified through file-editing tools in the
 #### Specific Files
 
 ```text
-/hiding --files README.md config.yml --dry-run
+/hide --files README.md config.yml --dry-run
 ```
 
 Literal paths are unconditional scope overrides. `--files` may appear once and accepts paths until the next recognized flag.
@@ -154,7 +154,7 @@ Literal paths are unconditional scope overrides. `--files` may appear once and a
 #### Git Worktree
 
 ```text
-/hiding --files worktree --dry-run
+/hide --files worktree --dry-run
 ```
 
 Worktree scope compares `HEAD` with the merge base of the locally resolved primary branch. It includes branch commits, staged changes, unstaged changes, and untracked non-ignored files. It never fetches remote refs.
@@ -181,12 +181,12 @@ Credentials are scanned before any style cleanup or purge decision.
 - Configuration credentials are replaced only when a format-safe placeholder preserves structure; otherwise they remain unchanged and are reported for human review.
 - If a credential may have been committed, pushed, or shared, rotate it even if the local file is cleaned.
 
-`/hiding` is defense in depth, not a replacement for a dedicated secret scanner.
+`/hide` is defense in depth, not a replacement for a dedicated secret scanner.
 
 ### Fresh-Context Review
 
 ```text
-/hiding --files report.md --use-subagent --dry-run
+/hide --files report.md --use-subagent --dry-run
 ```
 
 `--use-subagent` asks a fresh-context sub-agent to identify candidate leakage locations. The main agent still owns scope, credential scanning, purge decisions, edits, confirmations, validation, and file writes.
@@ -194,7 +194,7 @@ Credentials are scanned before any style cleanup or purge decision.
 ## Command Reference
 
 ```text
-/hiding [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
+/hide [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
 ```
 
 | Input | Values | Default |
@@ -228,6 +228,8 @@ For important files, start with `--dry-run`, inspect credential and configuratio
 
 ## Updating
 
+Version 0.9.0 renamed the installed skill command to `/hide`. The pre-0.9 command is not included as an alias.
+
 Agent Skills:
 
 ```bash
@@ -240,11 +242,11 @@ Claude Code:
 /plugin update hiding@hiding
 ```
 
-Restart Claude Code after updating. See the [changelog](CHANGELOG.md) for release details.
+Restart Claude Code after updating. Native plugin installs expose `/hiding:hide`; `/hide` works when it is unambiguous. See the [changelog](CHANGELOG.md) for release details.
 
 ## Scope Boundaries
 
-`/hiding` can remove source, provenance, attribution, constraint, audit, licensing, or disclosure clues when they appear in editable comments or prose and match the built-in categories or a user-specified target.
+`/hide` can remove source, provenance, attribution, constraint, audit, licensing, or disclosure clues when they appear in editable comments or prose and match the built-in categories or a user-specified target.
 
 Its scope is the selected file content. It does not rewrite Git history, external metadata, access logs, signed records, or copies outside that scope, and it does not silently change executable code or behavior-affecting configuration.
 

@@ -10,4 +10,4 @@ labels: enhancement
 **Proposed behavior**
 
 **Fit with project philosophy**
-`/hiding` is post-hoc cleanup with silent execution — no session rule injection, no side effects. See CONTRIBUTING.md. How does the proposal fit?
+`/hide` is post-hoc cleanup with silent execution — no session rule injection, no side effects. See CONTRIBUTING.md. How does the proposal fit?

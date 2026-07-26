@@ -1,6 +1,6 @@
 # Contributing to hiding-skill
 
-Thanks for your interest in improving `/hiding`.
+Thanks for your interest in improving `/hide`.
 
 ## Repository layout
 
@@ -8,7 +8,7 @@ This repo has no runtime implementation or build. It contains skill definitions,
 
 | Change | Files to edit |
 |--------|--------------|
-| Leakage category logic / skill behavior | `skills/hiding/SKILL.md` and its directly linked references |
+| Leakage category logic / skill behavior | `skills/hide/SKILL.md` and its directly linked references |
 | Pattern reference card | `AGENTS.md` |
 | User-facing install/usage docs | `README.md`, `README-zh.md` |
 | Version bump | `.claude-plugin/plugin.json`, `package.json`, `SKILL.md` frontmatter (`metadata.version`) |
@@ -17,7 +17,7 @@ This repo has no runtime implementation or build. It contains skill definitions,
 
 ## Making a change
 
-1. Keep universal behavior and routing in `skills/hiding/SKILL.md`; edit the corresponding directly linked reference for condition-specific behavior. See [Skill progressive loading](docs/en/skill-progressive-loading.md) for placement and model-validation rules.
+1. Keep universal behavior and routing in `skills/hide/SKILL.md`; edit the corresponding directly linked reference for condition-specific behavior. See [Skill progressive loading](docs/en/skill-progressive-loading.md) for placement and model-validation rules.
 2. Keep `AGENTS.md` (the condensed reference card) in sync if the pattern logic, output modes, flags, or execution rules changed.
 3. Keep `README.md` and `README-zh.md` in sync if user-facing behavior changed. The two READMEs must say the same thing.
 4. Update `CHANGELOG.md`.
@@ -31,7 +31,7 @@ This repo has no runtime implementation or build. It contains skill definitions,
 
 ## Design constraints (read before proposing features)
 
-`/hiding` is a **post-hoc cleanup tool**, not a real-time behavior constraint. Proposals that inject rules into agent sessions (always-on rule files, session hooks, statusline badges) conflict with the project philosophy and will be declined. See `CLAUDE.md` and `docs/zh/design-tradeoffs.md` for the full rationale.
+`/hide` is a **post-hoc cleanup tool**, not a real-time behavior constraint. Proposals that inject rules into agent sessions (always-on rule files, session hooks, statusline badges) conflict with the project philosophy and will be declined. See `CLAUDE.md` and `docs/zh/design-tradeoffs.md` for the full rationale.
 
 Silent execution is the default. Any user-visible output must be required by the corresponding Skill workflow and covered by its reporting contract, not added ad hoc.
 

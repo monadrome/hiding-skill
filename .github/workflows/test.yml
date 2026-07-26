@@ -19,6 +19,14 @@ jobs:
       - name: Check repository contracts
         run: npm test
 
+      - name: Check removed skill identifier
+        run: |
+          if git grep -n -P '/hiding(?![-:[:alnum:]_])|skills/hiding(?:/|$)' -- ':!CHANGELOG.md' ':!.github/workflows/test.yml' ':!scripts/check-skill-contract.js'; then
+            echo 'ERROR: Current files must use /hide and skills/hide.'
+            exit 1
+          fi
+          echo 'OK: no current /hiding invocation or skills/hiding path remains'
+
       - name: Validate plugin JSON
         run: |
           for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
@@ -39,7 +47,7 @@ jobs:
           node -e "
           const fs = require('fs');
           const yaml = require('js-yaml');
-          const content = fs.readFileSync('skills/hiding/SKILL.md', 'utf8');
+          const content = fs.readFileSync('skills/hide/SKILL.md', 'utf8');
           if (!content.startsWith('---')) { console.error('Missing frontmatter'); process.exit(1); }
           const end = content.indexOf('\n---', 3);
           if (end === -1) { console.error('Unterminated frontmatter'); process.exit(1); }
@@ -48,6 +56,7 @@ jobs:
           for (const field of ['name', 'description']) {
             if (typeof fm[field] !== 'string' || !fm[field].trim()) { console.error('Missing or empty ' + field + ' in frontmatter'); process.exit(1); }
           }
+          if (fm.name !== 'hide') { console.error('Skill name must be hide'); process.exit(1); }
           if (!fm.metadata || typeof fm.metadata.version !== 'string') { console.error('Missing metadata.version in frontmatter'); process.exit(1); }
           console.log('SKILL.md frontmatter: valid YAML, name/description/metadata.version present');
           "

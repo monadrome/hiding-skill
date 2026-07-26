@@ -68,7 +68,7 @@ Credential assertions apply to user-visible output and written artifacts. A mode
 
 ## Project Result
 
-The progressive-loading pass beginning at `b305974` reduced `skills/hiding/SKILL.md` from 243 lines, 2,894 words, and 20,514 bytes to 120 lines, 1,283 words, and 9,256 bytes. That is a reduction of 50.6% by lines, 55.7% by words, and 54.9% by bytes while preserving the discovery description and behavior contract.
+The progressive-loading pass beginning at `b305974` reduced `skills/hide/SKILL.md` from 243 lines, 2,894 words, and 20,514 bytes to 120 lines, 1,283 words, and 9,256 bytes. That is a reduction of 50.6% by lines, 55.7% by words, and 54.9% by bytes while preserving the discovery description and behavior contract.
 
 Seven conditional workflows moved into directly routed references. DeepSeek V4 Pro evaluations then exposed two consequential gaps: recognizable credential-pattern disclosure and assistant narration after a silent cleanup. Only those observed failures produced new always-loaded harness rules.
 

@@ -31,9 +31,9 @@ When an AI generates code or documentation, it has the opposite instinct from Fe
 
 This is the AI equivalent of Fermat writing a 100-page proof in the margin. It's exhausting. It reads like a lab notebook, not a codebase. Your colleagues don't need to see your internal monologue, and they *definitely* don't need to read three rejected approaches before getting to the one you actually used.
 
-## Enter `/hiding`: Be More Like Fermat
+## Enter `/hide`: Be More Like Fermat
 
-`/hiding` gives your code the Fermat treatment. It strips away the scaffolding — the "I think," the "let me consider," the "following the convention," the step-by-step reasoning — and leaves only the result.
+`/hide` gives your code the Fermat treatment. It strips away the scaffolding — the "I think," the "let me consider," the "following the convention," the step-by-step reasoning — and leaves only the result.
 
 The result looks like this:
 
@@ -59,11 +59,11 @@ They will NOT think: "I wonder what the AI's reasoning process looked like." Bec
 
 ### Level 1: The Clean Commit
 
-You run `/hiding` before `git commit`. The AI traces vanish. The commit history shows a clean, human-looking change. This is the basic level. It's like Fermat publishing the theorem without the proof — the result is correct, the derivation is private.
+You run `/hide` before `git commit`. The AI traces vanish. The commit history shows a clean, human-looking change. This is the basic level. It's like Fermat publishing the theorem without the proof — the result is correct, the derivation is private.
 
 ### Level 2: The Open Source PR
 
-You submit a PR to a popular open-source project. The maintainers are skeptical of AI-generated contributions. They scan the diff looking for "As an AI..." or "I think..." — and find nothing. Because `/hiding` removed all of it. The code stands on its own merits. It gets merged. This is the intermediate level — like Fermat's correspondence with other mathematicians, where he stated results without proofs and challenged them to figure it out.
+You submit a PR to a popular open-source project. The maintainers are skeptical of AI-generated contributions. They scan the diff looking for "As an AI..." or "I think..." — and find nothing. Because `/hide` removed all of it. The code stands on its own merits. It gets merged. This is the intermediate level — like Fermat's correspondence with other mathematicians, where he stated results without proofs and challenged them to figure it out.
 
 ### Level 3: The Client Deliverable
 
@@ -73,7 +73,7 @@ You're a freelancer. Your client doesn't know (and doesn't need to know) that yo
 
 No more deceptive than Fermat was. And Fermat is remembered as a genius, not a fraud.
 
-Here's the distinction that matters: `/hiding` doesn't fabricate results. It doesn't change what the code does. It doesn't add fake human flourishes. It *removes* — it strips away the scaffolding, the self-doubt, the narration, the justification. What remains is the code exactly as it was, minus the AI explaining itself.
+Here's the distinction that matters: `/hide` doesn't fabricate results. It doesn't change what the code does. It doesn't add fake human flourishes. It *removes* — it strips away the scaffolding, the self-doubt, the narration, the justification. What remains is the code exactly as it was, minus the AI explaining itself.
 
 Think of it as the difference between:
 - A chef serving you a dish and explaining every step ("I diced the onions, then I sautéed them for exactly 3 minutes, then I deglazed the pan...")
@@ -83,7 +83,7 @@ Both dishes are the same. The second one tastes better.
 
 ## The Real Magic: Silence
 
-Here's the truly Fermat-esque part of `/hiding`: after it runs, **you can't tell it ran**. There's no marker. No annotation. No `// cleaned by /hiding`. No "5 instances of leakage removed." Nothing.
+Here's the truly Fermat-esque part of `/hide`: after it runs, **you can't tell it ran**. There's no marker. No annotation. No `// cleaned by /hide`. No "5 instances of leakage removed." Nothing.
 
 The tool itself disappears. Like Fermat's proof, the operation leaves no trace.
 
@@ -93,9 +93,9 @@ This is not a bug — it's the entire point. The illusion is that the file was a
 
 Fermat had the luxury of pure mathematics — his hidden proofs couldn't hurt anyone. But AI-generated files sometimes contain actual credentials: API keys, tokens, passwords. These are dangerous.
 
-`/hiding` has exactly ONE mandatory exception to its silence: if it finds and removes a credential, it warns you. "If this file was ever committed or shared, rotate the affected credentials immediately."
+`/hide` has exactly ONE mandatory exception to its silence: if it finds and removes a credential, it warns you. "If this file was ever committed or shared, rotate the affected credentials immediately."
 
-This is the difference between Fermat and you: Fermat's unproven theorem was a gift to mathematics. Your accidentally-committed API key is a gift to cryptocurrency miners. `/hiding` will clean the file, but it won't pretend the key was never there. Because unlike Fermat, you actually have to live with the consequences.
+This is the difference between Fermat and you: Fermat's unproven theorem was a gift to mathematics. Your accidentally-committed API key is a gift to cryptocurrency miners. `/hide` will clean the file, but it won't pretend the key was never there. Because unlike Fermat, you actually have to live with the consequences.
 
 ## Conclusion: Cultivate Your Margin Notes
 
@@ -103,10 +103,10 @@ Fermat wrote his most famous contribution in a margin — a space that was techn
 
 Think of your AI conversations the same way. They're your margin notes. They helped you arrive at the result. They were useful. But they don't belong in the final product.
 
-`/hiding` is the act of closing the book and handing over only the theorem — beautiful, self-contained, and (if you've done it right) just a little bit mysterious.
+`/hide` is the act of closing the book and handing over only the theorem — beautiful, self-contained, and (if you've done it right) just a little bit mysterious.
 
 ---
 
 *"I have discovered a truly marvelous method for removing AI traces from code, which this README is too narrow to contain."*
 
-*— /hiding, probably*
+*— /hide, probably*

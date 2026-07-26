@@ -2,7 +2,7 @@
 
 Read this file only for `--files worktree`, together with the loaded automatic eligibility rules.
 
-Use local Git state only; do not fetch. Resolve paths from the working directory active when `/hiding` is invoked:
+Use local Git state only; do not fetch. Resolve paths from the working directory active when `/hide` is invoked:
 
 1. Run `git rev-parse --show-toplevel`; report and stop if outside a Git worktree. Require a valid `HEAD`.
 2. If `HEAD` is attached, read its remote from `branch.<name>.remote`; when that value names a remote (not `.`), try the locally available symbolic ref `<remote>/HEAD`. Then try `origin/HEAD`, `origin/main`, local `main`, `origin/master`, and local `master`, in that order. Resolve symbolic refs to their target. Report and stop if no candidate resolves to a commit.

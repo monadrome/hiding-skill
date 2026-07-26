@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-07-26
+
+### Breaking Changes
+
+- Renamed the installed skill identifier and slash command from `hiding` and `/hiding` to `hide` and `/hide`. Existing users must update their invocation after upgrading; no legacy alias is included.
+- Claude Code native plugin installs use the namespaced `/hiding:hide` command because the `hiding` plugin identity is preserved; Claude Code also accepts bare `/hide` when it is unambiguous.
+
+### Changed
+
+- Moved the canonical skill directory from `skills/hiding` to `skills/hide` and updated validation, documentation, and package contents accordingly.
+- Kept the **Hiding** product name, `HuaTalk/hiding-skill` repository, `@huatalk/hiding-skill` npm package, and `hiding` Claude plugin/marketplace identities unchanged.
+
 ## [0.8.1] - 2026-07-22
 
 ### Documentation
