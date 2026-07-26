@@ -1,4 +1,4 @@
-# `/hiding` 用户故事分析
+# `/hide` 用户故事分析
 
 ## 👤 角色画像
 
@@ -18,7 +18,7 @@
 ### US-01: 一句话安装
 
 > **作为** 刚听说这个工具的小张
-> **我想要** 用一条命令装上 `/hiding`
+> **我想要** 用一条命令装上 `/hide`
 > **以便** 不需要研究复杂配置就能开始用
 
 ```bash
@@ -38,7 +38,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 确认它真的有用，而不是装了就不管
 
 ```
-/hiding
+/hide
 ```
 
 **当前状态：** ⚠️ 有摩擦。如果当前会话没有创建/修改过文件，HITL 模式返回"零发现 → 静默"。
@@ -54,9 +54,9 @@ npx skills add HuaTalk/hiding-skill
 > **我想要** 一个"前后对比"的演示
 > **以便** 直观看到工具删除了什么、保留了什么
 
-**当前状态：** ❌ 不支持。README 没有 before/after 示例，也没有 `/hiding demo` 命令。
+**当前状态：** ❌ 不支持。README 没有 before/after 示例，也没有 `/hide demo` 命令。
 
-**建议：** README 加一个 3 行 before/after 示例；未来考虑 `/hiding demo` 生成一个带泄露痕迹的临时文件并清理。
+**建议：** README 加一个 3 行 before/after 示例；未来考虑 `/hide demo` 生成一个带泄露痕迹的临时文件并清理。
 
 ---
 
@@ -69,7 +69,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 后续读者无法从文件内容推断 AI 参与和内部约束
 
 ```
-/hiding --files src/main/java/com/example/UserService.java
+/hide --files src/main/java/com/example/UserService.java
 ```
 
 **理想体验：**
@@ -92,7 +92,7 @@ npx skills add HuaTalk/hiding-skill
 > **我想要** 先预览哪些内容会被标记为泄露
 > **以便** 确认不会误删重要内容
 
-**当前状态：** ❌ 不支持。没有 `/hiding --dry-run` 或 `/hiding --preview` 模式。
+**当前状态：** ❌ 不支持。没有 `/hide --dry-run` 或 `/hide --preview` 模式。
 
 **建议：** `--dry-run` 模式：输出会删除的内容但不修改文件。这是弥补"静默信任赤字"最直接的方案。
 
@@ -105,7 +105,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 这个 key 不会出现在 git 历史里
 
 ```
-/hiding --files config/application.yml
+/hide --files config/application.yml
 ```
 
 **理想体验：**
@@ -128,7 +128,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 文档读起来像一份纯粹的决策记录，而不是 AI 的思考笔记
 
 ```
-/hiding --files docs/design-proposal.md
+/hide --files docs/design-proposal.md
 ```
 
 **理想体验：**
@@ -144,7 +144,7 @@ npx skills add HuaTalk/hiding-skill
 
 ### US-08: 处理被标记为"应删除"的文件
 
-> **作为** 对一份 95% 都是 AI 思考记录的文件运行 `/hiding` 的小张
+> **作为** 对一份 95% 都是 AI 思考记录的文件运行 `/hide` 的小张
 > **我想要** 被告知这个文件基本全是 AI 推导
 > **以便** 我可以决定是删掉它还是重新写
 
@@ -165,7 +165,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 不把 AI 痕迹、内部约束和过程线索留给后续使用者
 
 ```
-/hiding
+/hide
 ```
 
 **理想体验：**
@@ -192,7 +192,7 @@ npx skills add HuaTalk/hiding-skill
 
 **当前状态：** ❌ 不支持。HITL 把所有模式混在一起。
 
-**建议：** `/hiding` 的 HITL 发现应该把凭据与密钥（安全问题）**单独置顶**，和其他模式（风格/质量）分开。安全发现必须突出显示，不能和"2 处 AI 自指涉"放在同一个 Tier。
+**建议：** `/hide` 的 HITL 发现应该把凭据与密钥（安全问题）**单独置顶**，和其他模式（风格/质量）分开。安全发现必须突出显示，不能和"2 处 AI 自指涉"放在同一个 Tier。
 
 ---
 
@@ -205,7 +205,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 交付给客户时不会暴露测试数据
 
 ```
-/hiding "mock data"
+/hide "mock data"
 ```
 
 **理想体验：** 搜索上下文中所有匹配"mock data"描述的文件，应用相关隐藏模式，静默执行。
@@ -226,7 +226,7 @@ npx skills add HuaTalk/hiding-skill
 > **以便** 对外发布前不暴露内部信息
 
 ```
-/hiding "Project Nebula"
+/hide "Project Nebula"
 ```
 
 **当前状态：** ⚠️ 与 US-11 相同的问题——范围未定义，静默修改大量文件无反馈。
@@ -237,7 +237,7 @@ npx skills add HuaTalk/hiding-skill
 
 ### US-13: Git 提交时不忘记运行
 
-> **作为** 每次 commit 前想自动提醒自己运行 `/hiding` 的小张
+> **作为** 每次 commit 前想自动提醒自己运行 `/hide` 的小张
 > **我想要** 一个 git hook 或者自动提醒
 > **以便** 不会因为忘记运行而把 AI 痕迹提交上去
 
@@ -245,7 +245,7 @@ npx skills add HuaTalk/hiding-skill
 
 **用户的变通方案：**
 ```bash
-alias gc='echo "记得先跑 /hiding" && git commit'
+alias gc='echo "记得先跑 /hide" && git commit'
 ```
 
 **建议：** 在 README 中发布一个**推荐的但不自动安装**的 pre-commit hook 模板。用户主动选择安装，不违背静默哲学。
@@ -301,22 +301,22 @@ jobs:
 
 ```
 Day 0   安装     npx skills add HuaTalk/hiding-skill
-        首次尝试   /hiding → （静默）怎么没反应？
+        首次尝试   /hide → （静默）怎么没反应？
         看README  理解静默哲学、三种模式
 
 Day 1   日常使用  让Claude生成 UserService.java
         git add .
-        /hiding --files UserService.java → （静默完成）
+        /hide --files UserService.java → （静默完成）
         git commit → 干净的提交！
         ✅ "aha moment"
 
-Day 7   养成习惯   每天下班前 /hiding
+Day 7   养成习惯   每天下班前 /hide
         会话分析   发现 2 个文件有泄露痕迹
         HITL确认   勾选清理
         ✅ 逐步建立信任
 
 Day 30  一次惊险   application.yml 有个API key
-        /hiding → 静默剥离
+        /hide → 静默剥离
         ❌ 但不知道需要去轮换key！
         ⚠️ 安全事件
 
@@ -360,4 +360,4 @@ Day 90  想要自动化  想在CI里集成
 
 4. **预览路径（US-05）是最大需求缺口。** Dry-run（试运行）是弥补"静默信任赤字"最简单有效的方法，多个用户故事都指向这个需求。
 
-5. **自动化路径（US-13/14）决定了 tool → product 的跨越。** 当前 `/hiding` 是一个开发者的个人工具；加上 git hook 和 CI 集成后，它变成了一个团队工具。这是从 v0.5 到 v1.0 的质变。
+5. **自动化路径（US-13/14）决定了 tool → product 的跨越。** 当前 `/hide` 是一个开发者的个人工具；加上 git hook 和 CI 集成后，它变成了一个团队工具。这是从 v0.5 到 v1.0 的质变。

@@ -4,19 +4,19 @@ Which files in this repo map to which AI agent.
 
 ## Skill Distribution (via `npx skills`)
 
-The canonical skill `skills/hiding/SKILL.md` is distributed to **70+ agents** via the open agent skills ecosystem:
+The canonical skill `skills/hide/SKILL.md` is distributed to **70+ agents** via the open agent skills ecosystem:
 
 ```bash
 npx skills add HuaTalk/hiding-skill
 ```
 
-This installs the `/hiding` slash command to all detected agents (Claude Code, Cursor, Windsurf, Cline, Gemini CLI, Copilot, Codex, OpenCode, Roo Code, Aider, Zed, and more).
+This installs the `/hide` slash command to all detected agents (Claude Code, Cursor, Windsurf, Cline, Gemini CLI, Copilot, Codex, OpenCode, Roo Code, Aider, Zed, and more).
 
 ## Claude Code Native
 
 | Agent | File(s) | Type |
 |-------|---------|------|
-| **Claude Code** | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `skills/hiding/SKILL.md` | Plugin + Skill |
+| **Claude Code** | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `skills/hide/SKILL.md` | Plugin + Skill |
 
 ## Additional Agents (via npx skills)
 
@@ -30,7 +30,7 @@ All agents not listed above receive the skill via `npx skills`. No platform-spec
 npx skills add HuaTalk/hiding-skill
 ```
 
-Gives you the `/hiding` command on all installed agents.
+Gives you the `/hide` command on all installed agents.
 
 ### Plugin install (Claude Code native)
 
@@ -39,8 +39,8 @@ Gives you the `/hiding` command on all installed agents.
 /plugin install hiding@hiding
 ```
 
-Gives you the full `/hiding` command with session-aware HITL mode.
+Gives you the namespaced `/hiding:hide` command with session-aware HITL mode. Claude Code also accepts `/hide` when no other command uses that name.
 
 ### Reference card
 
-`AGENTS.md` provides a quick-reference of the five leakage categories. It is not a runtime rule file — it exists for humans to understand what `/hiding` strips.
+`AGENTS.md` provides a quick-reference of the five leakage categories. It is not a runtime rule file — it exists for humans to understand what `/hide` strips.

@@ -8,7 +8,7 @@ labels: bug
 (e.g. Claude Code 2.x, Cursor, Codex — and how you installed: `npx skills` or `/plugin install`)
 
 **Command used**
-(e.g. `/hiding --mode backup config.yml`)
+(e.g. `/hide --mode backup config.yml`)
 
 **What happened**
 

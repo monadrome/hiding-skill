@@ -5,13 +5,18 @@ const path = require('path');
 const crypto = require('crypto');
 
 const root = path.join(__dirname, '..');
-const skillDir = path.join(root, 'skills', 'hiding');
+const skillDir = path.join(root, 'skills', 'hide');
 const skillPath = path.join(skillDir, 'SKILL.md');
 const referencesDir = path.join(skillDir, 'references');
+const legacySkillDir = path.join(root, 'skills', 'hiding');
 const expectedDescriptionSha256 = '343fa0d3a526db0b36d296b57a73683e93089e7918a27bf8222ffa578c901972';
 const expectedArgumentHint = '[<what-to-hide>...] [--files <file>...|session|worktree] [options]';
 
 const failures = [];
+
+if (fs.existsSync(legacySkillDir)) {
+  failures.push('Legacy skills/hiding directory must not be shipped alongside skills/hide.');
+}
 
 function fail(message) {
   failures.push(message);
@@ -51,8 +56,8 @@ if (!frontmatterMatch) {
   fail('SKILL.md frontmatter is missing or malformed.');
 } else {
   const frontmatter = frontmatterMatch[1];
-  if (frontmatterValue(frontmatter, 'name') !== 'hiding') {
-    fail('SKILL.md name must remain hiding.');
+  if (frontmatterValue(frontmatter, 'name') !== 'hide') {
+    fail('SKILL.md name must be hide.');
   }
   const description = frontmatterValue(frontmatter, 'description') || '';
   const descriptionSha256 = crypto.createHash('sha256').update(description).digest('hex');
@@ -143,6 +148,9 @@ if (skill.indexOf('(references/automatic-scope.md)') > skill.indexOf('(reference
 }
 
 const corpus = [skill, ...referenceFiles.map(read)].join('\n');
+if (/\/hiding(?![-A-Za-z0-9_])/.test(corpus)) {
+  fail('Legacy /hiding invocation found in the installed skill.');
+}
 const requiredInlineContracts = [
   ['silent no-findings behavior', /with no findings outside Session HITL or `--dry-run`, do nothing and say nothing/],
   ['silent tool-only execution', /On silent paths, emit tool calls only from the start and do not narrate analysis/],

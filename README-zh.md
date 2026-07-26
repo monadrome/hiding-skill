@@ -12,7 +12,7 @@ Hiding 是面向编码 Agent 的策略性内容清理 Skill。当文件需要减
 
 ## 快速开始
 
-通过 npm 安装 `/hiding`：
+通过 npm 安装 `/hide`：
 
 ```bash
 npm install -D @huatalk/hiding-skill
@@ -22,20 +22,20 @@ npx skills-npm setup
 然后让 Agent 预览当前会话中修改过的文件：
 
 ```text
-/hiding --dry-run
+/hide --dry-run
 ```
 
 检查发现结果后，执行清理：
 
 ```text
-/hiding
+/hide
 ```
 
 需要其他范围时，可以选择[指定文件](#指定文件)、[Git 工作区](#git-工作区)或[额外隐藏内容](#语义目标)。
 
 ## 工作方式
 
-`/hiding` 在内容产生后按需运行，而不是持续干预 Agent 的正常推理过程。目标可以是草稿、既有文件、待审查或交接的产物，也可以是准备发布的输出。
+`/hide` 在内容产生后按需运行，而不是持续干预 Agent 的正常推理过程。目标可以是草稿、既有文件、待审查或交接的产物，也可以是准备发布的输出。
 
 使用 `session` 或 `worktree` 自动选取时，它会识别面向用户的产物，并排除 Agent 控制状态、规划元数据、构建输出和无关文件。
 
@@ -95,7 +95,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 /plugin install hiding@hiding
 ```
 
-安装完成后重启 Claude Code。
+安装完成后重启 Claude Code。原生插件的规范命令是 `/hiding:hide`；当没有其他同名命令时，也可以使用更短的 `/hide`。
 
 ## 基本工作流
 
@@ -106,7 +106,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 5. **清理** - 移除最小且完整的注释或 prose 单元。不会静默修改可执行代码、字符串字面量和影响行为的配置值。
 6. **验证** - 重新读取候选版本，验证结构，检查并发修改，然后应用选定的输出模式。
 
-在直接文件模式下没有发现内容时，`/hiding` 保持静默。安全告警、预览、验证失败和输入错误仍然可见。
+在直接文件模式下没有发现内容时，`/hide` 保持静默。安全告警、预览、验证失败和输入错误仍然可见。
 
 ## 包含的能力
 
@@ -127,7 +127,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 开头的位置参数可以在内置扫描之外增加一次性内容目标：
 
 ```text
-/hiding "data sources" "internal project name" --files report.md --dry-run
+/hide "data sources" "internal project name" --files report.md --dry-run
 ```
 
 目标是语义短语，不是正则表达式，并且必须位于第一个 flag 之前。匹配到可执行代码、标识符或影响行为的配置时，只报告给人工审查，不自动修改。
@@ -137,8 +137,8 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 #### 当前会话
 
 ```text
-/hiding
-/hiding --files session --dry-run
+/hide
+/hide --files session --dry-run
 ```
 
 默认范围是当前 Agent 会话中通过文件编辑工具创建或修改的文件。Git 状态可以提供上下文，但不会扩大该清单。
@@ -146,7 +146,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 #### 指定文件
 
 ```text
-/hiding --files README.md config.yml --dry-run
+/hide --files README.md config.yml --dry-run
 ```
 
 字面路径会无条件覆盖自动范围判断。`--files` 最多出现一次，并持续接收路径，直到遇到下一个已知 flag。
@@ -154,7 +154,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 #### Git 工作区
 
 ```text
-/hiding --files worktree --dry-run
+/hide --files worktree --dry-run
 ```
 
 工作区范围会比较 `HEAD` 与本地解析出的主分支之间的 merge base，包括分支提交、暂存变更、未暂存变更和未被忽略的未跟踪文件。它不会获取远端 refs。
@@ -181,12 +181,12 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 - 只有在格式安全占位符能够保持结构时，才替换配置凭据；否则保持不变并交由人工审查。
 - 如果凭据可能已被提交、推送或分享，即使本地文件已清理也需要轮换。
 
-`/hiding` 属于纵深防御，不能替代专用密钥扫描器。
+`/hide` 属于纵深防御，不能替代专用密钥扫描器。
 
 ### 新鲜上下文审查
 
 ```text
-/hiding --files report.md --use-subagent --dry-run
+/hide --files report.md --use-subagent --dry-run
 ```
 
 `--use-subagent` 让具有新鲜上下文的子代理识别候选泄露位置。主代理仍然负责范围、凭据扫描、整文件判断、修改、确认、验证和文件写入。
@@ -194,7 +194,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 ## 命令参考
 
 ```text
-/hiding [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
+/hide [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
 ```
 
 | 输入 | 值 | 默认 |
@@ -228,6 +228,8 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 
 ## 更新
 
+v0.9.0 将安装后的 Skill 命令改为 `/hide`。v0.9.0 之前的命令不会作为别名继续提供。
+
 Agent Skills：
 
 ```bash
@@ -240,11 +242,11 @@ Claude Code：
 /plugin update hiding@hiding
 ```
 
-更新后重启 Claude Code。版本详情见[变更记录](CHANGELOG.md)。
+更新后重启 Claude Code。原生插件安装会提供 `/hiding:hide`；无同名冲突时也可以使用 `/hide`。版本详情见[变更记录](CHANGELOG.md)。
 
 ## 范围边界
 
-当来源、出处、署名、约束、审计、许可证或披露线索出现在可编辑的注释或 prose 中，并符合内置类别或用户指定目标时，`/hiding` 可以将其移除。
+当来源、出处、署名、约束、审计、许可证或披露线索出现在可编辑的注释或 prose 中，并符合内置类别或用户指定目标时，`/hide` 可以将其移除。
 
 它只处理选定的文件内容，不会改写 Git 历史、外部元数据、访问日志、签名记录或范围之外的副本，也不会静默修改可执行代码或影响行为的配置。
 
