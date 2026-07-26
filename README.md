@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/hiding-hero.png" alt="AI-generated text being erased" width="240">
+</p>
+
 # Hiding
 
 [![CI](https://github.com/HuaTalk/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/HuaTalk/hiding-skill/actions/workflows/test.yml)
