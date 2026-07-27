@@ -40,4 +40,4 @@ Strip conversational derivations, intermediate attempts, temporary work logs, an
 
 ## Overlap
 
-Categories may overlap. AI-facing rationale/guardrails and thought-process traces commonly overlap. When uncertain whether content is transient process or durable rationale, preserve it; in HITL or `--dry-run`, flag it for human review instead of stripping.
+Categories may overlap. AI-facing rationale/guardrails and thought-process traces commonly overlap. When uncertain whether content is transient process or durable rationale, preserve it; in HITL or preview intent, flag it for human review instead of stripping.

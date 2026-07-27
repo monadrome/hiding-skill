@@ -100,12 +100,12 @@ service:
 
 A format-safe placeholder is allowed only when the configuration remains structurally valid. A credential embedded in executable code is not silently changed; `/hide` reports the location for human review instead.
 
-Whenever a credential is found, including during `--dry-run`, `/hide` warns that the credential may need rotation. It never prints the discovered value in its report.
+Whenever a credential is found, including during a preview (`--dry-run`), `/hide` warns that the credential may need rotation. It never prints the discovered value in its report.
 
 ## 7. User-Specified Target
 
 ```text
-/hide "internal project name" --files release-notes.md --dry-run
+/hide preview release-notes.md and remove the internal project name
 ```
 
 The target is interpreted semantically. Matching prose may be removed, but matches in identifiers, executable code, or behavior-affecting values are reported rather than changed.
@@ -114,4 +114,4 @@ The target is interpreted semantically. Matching prose may be removed, but match
 
 After producing a cleanup candidate, `/hide` re-reads it and uses a parser for JSON, YAML, or XML where available. If structural verification fails, the candidate is discarded and the original remains unchanged.
 
-For important files, run `--dry-run` first and follow cleanup with the host project's own tests and a dedicated secret scanner.
+For important files, ask for a preview first and follow cleanup with the host project's own tests and a dedicated secret scanner.

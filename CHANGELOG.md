@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-07-27
+
+### Changed
+
+- Replaced the mandatory positional/flag grammar with natural-language intent resolution for targets, file scope, previews, output modes, and fresh-context review.
+- Kept `--files`, `--mode`, `--dry-run`, and `--use-subagent` as backward-compatible hints that may appear in any order or alongside prose.
+- Distinguished cleanup-input paths from path-like semantic targets and explicit exclusions so natural-language requests do not expand file scope accidentally.
+- Added static contract checks that prevent reintroducing ordering, quoting, single-occurrence, and reserved-selector requirements.
+- Strengthened silent-termination instructions and checks against `Done`, completion summaries, and removed-content details after the final verification tool call.
+
 ## [0.9.0] - 2026-07-26
 
 ### Breaking Changes

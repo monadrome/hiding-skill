@@ -1,10 +1,10 @@
 # Automatic Scope Eligibility
 
-Resolve scope before Step 0 or any content scan. Read this file when `--files` is omitted or set to `session` or `worktree`, before candidate content access.
+Resolve scope before Step 0 or any content scan. Read this file whenever the request uses automatic `session` or `worktree` scope, including the default session scope, before candidate content access.
 
 For each candidate, apply this order and stop at the first decisive rule:
 
-1. **Explicit selection**: a literal `--files <path>` is in scope, even when it is tool control state.
+1. **Explicit selection**: a file the user explicitly assigns as an input to inspect, scan, clean, or write is in scope, even when it is tool control state. A path mentioned only as content to remove is not selected. A path the user excludes is never a candidate.
 2. **Tool ownership**: automatically exclude known agent/tool control state, including `.planning/**`, recognizable planning-with-files state (`task_plan.md`, `findings.md`, and `progress.md` used together), and equivalent session plans, progress logs, or memory used to operate the agent.
 3. **Task goal**: include files directly requested as task deliverables, such as an article, report, code change, ADR, requirements document, final research conclusion, or project-facing plan.
 4. **Target consumer**: include files intended for human or project use; exclude files intended only for an agent or tool.

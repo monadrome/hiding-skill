@@ -26,16 +26,16 @@ npx skills-npm setup
 Then ask your agent to preview files changed in the current session:
 
 ```text
-/hide --dry-run
+/hide preview the files changed in this session
 ```
 
 Review the findings, then apply the cleanup:
 
 ```text
-/hide
+/hide clean the files changed in this session
 ```
 
-Choose another scope when needed: [specific files](#specific-files), [the Git worktree](#git-worktree), or [additional content to hide](#semantic-targets).
+Describe another scope or cleanup goal in the same way: [specific files](#specific-files), [the Git worktree](#git-worktree), or [additional content to hide](#semantic-targets).
 
 ## How It Works
 
@@ -104,13 +104,13 @@ Restart Claude Code after installation. The native plugin command is `/hiding:hi
 ## The Basic Workflow
 
 1. **Select outputs** - Use current-session files by default, explicit paths for precise control, or the Git worktree for branch-wide review.
-2. **Preview** - Add `--dry-run` to see scope, findings, and conservative exclusions without modifying files.
+2. **Preview** - Ask to preview or inspect without changing files to see scope, findings, and conservative exclusions.
 3. **Classify** - Credentials are handled first, followed by file-level purge candidates, inline leakage, and user-specified targets.
 4. **Confirm** - Session review is human-in-the-loop. Whole-file deletion and symlink traversal always require explicit confirmation.
 5. **Clean** - Remove the smallest coherent comment or prose unit. Executable code, string literals, and behavior-affecting values are not silently changed.
 6. **Verify** - Re-read the candidate, validate structure, check for concurrent edits, then apply the selected output mode.
 
-When there are no findings in direct file modes, `/hide` stays silent. Security warnings, previews, validation failures, and input errors remain visible.
+When there are no findings in direct file modes, `/hide` stays silent. Security warnings, previews, validation failures, and required intent clarifications remain visible.
 
 ## What's Inside
 
@@ -128,13 +128,13 @@ These are judgment principles, not a keyword list. `TODO`, `FIXME`, and `HACK` a
 
 ### Semantic Targets
 
-Leading positional arguments add one-off content goals to the built-in scan:
+Describe one-off content goals anywhere in the request to augment the built-in scan:
 
 ```text
-/hide "data sources" "internal project name" --files report.md --dry-run
+/hide preview report.md and remove data-source references plus the internal project name
 ```
 
-Targets are semantic phrases, not regular expressions. They must appear before the first flag. Matches in executable code, identifiers, or behavior-affecting configuration are reported for human review rather than modified automatically.
+Targets are interpreted semantically, not as regular expressions. Quoting and fixed argument positions are not required. Matches in executable code, identifiers, or behavior-affecting configuration are reported for human review rather than modified automatically.
 
 ### File Selection
 
@@ -142,7 +142,7 @@ Targets are semantic phrases, not regular expressions. They must appear before t
 
 ```text
 /hide
-/hide --files session --dry-run
+/hide preview the files changed in this session
 ```
 
 The default scope is files created or modified through file-editing tools in the current agent session. Git status may provide context but does not expand this inventory.
@@ -150,20 +150,20 @@ The default scope is files created or modified through file-editing tools in the
 #### Specific Files
 
 ```text
-/hide --files README.md config.yml --dry-run
+/hide preview README.md and config.yml
 ```
 
-Literal paths are unconditional scope overrides. `--files` may appear once and accepts paths until the next recognized flag.
+Paths assigned as files to inspect or clean are unconditional scope selections and may appear naturally anywhere in the request. Path-like names used as content targets or exclusions are not selected: `/hide remove policy.md references from report.md` scans `report.md`, while `do not touch config.yml` excludes `config.yml`. Multiple requested scope sources are combined and de-duplicated after exclusions.
 
 #### Git Worktree
 
 ```text
-/hide --files worktree --dry-run
+/hide preview everything changed in this Git worktree
 ```
 
 Worktree scope compares `HEAD` with the merge base of the locally resolved primary branch. It includes branch commits, staged changes, unstaged changes, and untracked non-ignored files. It never fetches remote refs.
 
-`session` and `worktree` are reserved standalone selectors. Use `./session` or `./worktree` for literal files with those names.
+When `session` or `worktree` is the name of a literal file, describe it as a file path so the intent is clear.
 
 ### Output Modes
 
@@ -190,26 +190,26 @@ Credentials are scanned before any style cleanup or purge decision.
 ### Fresh-Context Review
 
 ```text
-/hide --files report.md --use-subagent --dry-run
+/hide have a fresh-context sub-agent review report.md without changing it
 ```
 
-`--use-subagent` asks a fresh-context sub-agent to identify candidate leakage locations. The main agent still owns scope, credential scanning, purge decisions, edits, confirmations, validation, and file writes.
+A fresh-context sub-agent identifies candidate leakage locations only. The main agent still owns scope, credential scanning, purge decisions, edits, confirmations, validation, and file writes.
 
-## Command Reference
+## Natural-Language Requests
 
 ```text
-/hide [<what-to-hide>...] [--files <file>...|session|worktree] [--mode <inplace|newfile|backup>] [--dry-run] [--use-subagent]
+/hide [describe what to hide, where to look, and how to handle the result]
 ```
 
-| Input | Values | Default |
+| Intent | Example phrasing | Default |
 |---|---|---|
-| `<what-to-hide>...` | Leading semantic target phrases | None |
-| `--files` | Literal paths, `session`, or `worktree` | `session` |
-| `--mode` | `inplace`, `newfile`, or `backup` | `inplace` |
-| `--dry-run` | Preview without writes | Off |
-| `--use-subagent` | Fresh-context candidate detection | Off |
+| Additional content | "remove data-source references" | Built-in categories only |
+| Scope | "README.md and config.yml", "this session", "the worktree" | Current session |
+| Preview | "preview", "show findings", "do not change files" | Write after verification |
+| Output | "edit in place", "write a cleaned copy", "back up the original" | `inplace` |
+| Fresh context | "use a fresh-context sub-agent" | Main agent only |
 
-Unknown flags, targets placed after flags, repeated `--files`, and ambiguous selector combinations are errors.
+The legacy `--files`, `--mode`, `--dry-run`, and `--use-subagent` forms remain supported. They may appear in any order or alongside prose; the Skill resolves intent rather than enforcing an argument grammar. It asks for clarification only when ambiguity would materially change file access or writes.
 
 ## Philosophy
 
@@ -228,11 +228,11 @@ Repository CI validates version consistency, static Skill contract anchors, loca
 
 Detection relies on contextual model judgment and may miss or over-classify content. Files over 10,000 lines or 500 KB, binary files, directories, and empty files are rejected. JSON, YAML, and XML use parsers where available; other formats may receive visual structural verification.
 
-For important files, start with `--dry-run`, inspect credential and configuration findings manually, then run the host project's formatter, linter, parser, tests, and secret scanner.
+For important files, start by asking for a preview, inspect credential and configuration findings manually, then run the host project's formatter, linter, parser, tests, and secret scanner.
 
 ## Updating
 
-Version 0.9.0 renamed the installed skill command to `/hide`. The pre-0.9 command is not included as an alias.
+Version 0.9.1 accepts natural-language requests and keeps the previous flags as optional compatibility aliases. Version 0.9.0 renamed the installed skill command to `/hide`; the pre-0.9 command is not included as an alias.
 
 Agent Skills:
 

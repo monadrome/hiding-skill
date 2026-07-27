@@ -1,6 +1,6 @@
 # Session HITL
 
-Read this file when `--files` is omitted or explicitly set to `session`, together with the loaded automatic eligibility rules.
+Read this file when the request defaults to or explicitly asks for current-session files, together with the loaded automatic eligibility rules.
 
 ## Step H1: Session Inventory
 
@@ -10,11 +10,11 @@ Record session topics, sensitive context, and reasoning traces as Tier 3 clues. 
 
 ## Step H1.5: Resolve Uncertain Scope
 
-Before H2 or any content scan, classify uncertain files autonomously from task goal, ownership, and intended consumer. Preserve and exclude low-confidence files without asking. Under `--dry-run`, list these exclusions with a brief reason. Ask for scope clarification only if conservative exclusion would prevent completion of an explicit user request.
+Before H2 or any content scan, classify uncertain files autonomously from task goal, ownership, and intended consumer. Preserve and exclude low-confidence files without asking. Under preview intent, list these exclusions with a brief reason. Ask for scope clarification only if conservative exclusion would prevent completion of an explicit user request.
 
 ## Step H2: Leakage Candidate Detection
 
-Scan only eligible inventory files using the loaded leakage categories and any user-specified targets. With `--use-subagent`, use its candidate list as detection evidence; the main agent still performs credential scanning, purge classification, tiering, and every later decision.
+Scan only eligible inventory files using the loaded leakage categories and any user-specified targets. With fresh-context sub-agent intent, including the `--use-subagent` alias, use its candidate list as detection evidence; the main agent still performs credential scanning, purge classification, tiering, and every later decision.
 
 | Tier | Finding |
 |------|---------|
@@ -31,4 +31,4 @@ Otherwise present Tier 0 first, then per-file delete/clean choices, Tier 3 conce
 
 ## Step H4: Execute User Choices
 
-Delete only after explicit confirmation; deletion ignores `--mode`. Clean selected files with Steps 0-4 and the chosen output mode. Stay silent afterward except for required warnings.
+Delete only after explicit confirmation; deletion ignores the requested output mode. Clean selected files with Steps 0-4 and the chosen output mode. Stay silent afterward except for required warnings.

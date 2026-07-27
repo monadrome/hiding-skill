@@ -1,6 +1,6 @@
 # Sub-Agent Review
 
-Read this file only for `--use-subagent`.
+Read this file only when the request asks for fresh-context sub-agent detection, including the `--use-subagent` compatibility alias.
 
 The sub-agent detects candidate leakage only. The main agent always executes Steps 0-4 and owns scope, credential scanning, purge decisions, confirmations, edits, warnings, validation, output modes, and writes.
 
@@ -12,6 +12,6 @@ The sub-agent detects candidate leakage only. The main agent always executes Ste
    - the relevant file-type context for interpreting comments and prose.
 3. Scope the sub-agent: identify possible category and user-target matches only. Do not decide whether the whole file is a purge candidate, recommend an edit action, classify executable versus safe-to-edit content, handle credentials, inspect other files or Git history, write/delete files, run Steps 0-4, choose output modes, or spawn agents.
 4. Return a candidate list only. Each item includes `<file>:<line-range>`, built-in category or `user target: <target>`, and a brief reason. Redact any possible credential value and label it `credential candidate`. Return an empty list for zero matches.
-5. The main agent treats the list as evidence, not a decision. Independently run Step 2, decide which candidates are editable under Step 3 and `Strip Strategy by File Type`, apply allowed edits, then run Step 4 and the selected output mode. `--dry-run` presents main-agent findings, not raw sub-agent instructions.
+5. The main agent treats the list as evidence, not a decision. Independently run Step 2, decide which candidates are editable under Step 3 and `Strip Strategy by File Type`, apply allowed edits, then run Step 4 and the selected output mode. Preview intent presents main-agent findings, not raw sub-agent instructions.
 
-Candidate detection is the sub-agent's entire responsibility. All behavior after detection remains identical to main-agent execution without `--use-subagent`.
+Candidate detection is the sub-agent's entire responsibility. All behavior after detection remains identical to main-agent execution without fresh-context detection.

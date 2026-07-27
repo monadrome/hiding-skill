@@ -80,7 +80,7 @@ Rationale (full argument in `docs/zh/design-tradeoffs.md`):
 
 3. **Chinese documentation is user-facing only**: `README-zh.md` and `docs/zh/` exist for Chinese-speaking users. English docs live in `docs/en/`. All maintainer-facing content (this file, scripts, CI, SKILL.md body) is English.
 
-4. **Version `0.9.0`**, Agent Skills command `/hide`, Claude plugin command `/hiding:hide` (with bare `/hide` when unambiguous), installation path `hiding@hiding`. Features: leading user-specified semantic targets, literal-path, current-session, and Git-worktree file selection (`--files`), output modes (inplace/newfile/backup), `--dry-run`, `--use-subagent`, credential-rotation warnings, directly routed progressive loading, and static Skill contract checks. `--files worktree` compares the primary-branch merge base with the worktree where the skill is invoked; omitting `--files` is equivalent to `--files session`.
+4. **Version `0.9.1`**, Agent Skills command `/hide`, Claude plugin command `/hiding:hide` (with bare `/hide` when unambiguous), installation path `hiding@hiding`. The command accepts natural-language intent for semantic targets, cleanup-input paths, exclusions, current-session or Git-worktree scope, previews, output modes, and fresh-context review. `--files`, `--mode`, `--dry-run`, and `--use-subagent` remain compatibility aliases rather than a required grammar. Worktree scope compares the primary-branch merge base with the worktree where the skill is invoked; omitted scope defaults to the current session.
 
 ## Maintenance
 

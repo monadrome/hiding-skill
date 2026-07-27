@@ -1,6 +1,6 @@
 # Git Worktree Selection
 
-Read this file only for `--files worktree`, together with the loaded automatic eligibility rules.
+Read this file only when the request asks for Git worktree scope, together with the loaded automatic eligibility rules.
 
 Use local Git state only; do not fetch. Resolve paths from the working directory active when `/hide` is invoked:
 
@@ -9,8 +9,8 @@ Use local Git state only; do not fetch. Resolve paths from the working directory
 3. Run `git merge-base HEAD <base-ref>`; report and stop if no merge base exists.
 4. From the repository root, collect tracked paths with `git diff --name-only --diff-filter=ACMRTUXB -z <merge-base> --` and untracked, non-ignored paths with `git ls-files --others --exclude-standard -z`.
 5. De-duplicate the NUL-delimited paths. Exclude deleted files, ignored files, directories, and index entries with mode `160000` (submodules). Classify the remaining files using the loaded automatic eligibility rules.
-6. Before Step 0 or any scan, resolve uncertain candidates autonomously using task/session context. Exclude low-confidence candidates without scanning. Under `--dry-run`, list these conservative exclusions with a brief reason.
+6. Before Step 0 or any scan, resolve uncertain candidates autonomously using task/session context. Exclude low-confidence candidates without scanning. Under preview intent, list these conservative exclusions with a brief reason.
 
 This comparison is `merge-base(HEAD, primary branch) -> worktree at invocation time`, so it includes branch commits, staged changes, unstaged changes, and untracked files, but not primary-branch-only commits made after divergence.
 
-If no eligible candidates remain after classification, report `No eligible files changed in the current worktree relative to <base>.` and stop. Under `--dry-run`, show the resolved base ref, merge base, eligible paths, and conservative scope exclusions before the normal preview. All output modes, purge checks, credential handling, and `--use-subagent` behavior then apply per selected file.
+If no eligible candidates remain after classification, report `No eligible files changed in the current worktree relative to <base>.` and stop. Under preview intent, show the resolved base ref, merge base, eligible paths, and conservative scope exclusions before the normal preview. All output modes, purge checks, credential handling, and fresh-context sub-agent behavior then apply per selected file.

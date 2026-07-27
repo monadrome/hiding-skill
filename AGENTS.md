@@ -47,34 +47,34 @@ For automatic session or `worktree` selection, resolve output-artifact eligibili
 
 Target collision (`newfile`/`backup`): never overwrite an existing target — use a numbered alternative (`-cleaned-2`, `.bak-2`, incrementing) and report the name used in one line.
 
-## Arguments And Flags
+## Natural-Language Input
 
-Leading positional arguments are one-off semantic targets that augment the five-category scan. Quote multi-word targets and place every target before the first flag:
+Treat everything after `/hide` as a natural-language request. Infer semantic targets, literal files or automatic session/worktree scope, preview versus write intent, output mode, and fresh-context review from any clear phrasing:
 
 ```bash
-/hide "data sources" "internal review rules" --files report.md
+/hide preview report.md and remove data-source and internal-review references
 ```
 
-| Flag | Effect |
-|------|--------|
-| `--dry-run` | Preview changes without modifying files (credential warning still fires) |
-| `--use-subagent` | Ask a fresh-context sub-agent to identify candidate leakage only. Before spawning, the main agent resolves the target and `references/leakage-categories.md` to absolute paths from the loaded Skill location; a missing reference is an installation error. The main agent retains all confirmation, security, editing, validation, output, and write logic. If sub-agents are unavailable, report the fallback. |
-| `--mode <inplace\|newfile\|backup>` | Set output mode (invalid value → error, no silent fallback) |
-| `--files <file>...`, `--files session`, or `--files worktree` (at most once) | Select literal paths, current-session edits, or invocation-worktree changes. `session` and `worktree` are reserved selectors and must each be the only value; use `./session` or `./worktree` for literal same-named files. Omitting `--files` is equivalent to `--files session`. |
+Traditional forms remain optional compatibility aliases: `--dry-run` means preview, `--mode` selects `inplace`/`newfile`/`backup`, `--files` identifies literal or automatic scope, and `--use-subagent` requests fresh-context candidate detection. They may appear in any order or be mixed with prose. Do not require quoting, a fixed position, single occurrence, or exact option spelling when the intent is otherwise clear.
 
-Targets are natural-language descriptions, not regexes. In comments or prose, remove the smallest coherent unit that hides the target. Never change executable code, identifiers, or behavior-affecting config values; report those matches for human review. Unknown/misspelled flags, targets after the first flag, and malformed values → error; do not guess intent.
+Resolve path-like mentions by their role. A file is unconditionally in scope only when the user assigns it as an input to inspect, scan, clean, or write. A path named as content to remove is a semantic target, not a scope selection; a path the user excludes must never be read or written. Combine and de-duplicate requested scope sources after applying exclusions; default to current-session files and `inplace` output when omitted. Ask only when ambiguity would materially change which files are read or written, whether writes occur, or where output is placed.
 
-For `--files worktree`, locate the repository from the working directory where the skill is invoked and use local refs only. Resolve the primary branch from the current branch's configured `<remote>/HEAD`, `origin/HEAD`, `origin/main`, local `main`, `origin/master`, then local `master`; stop if unresolved or if `HEAD` has no merge base. Select tracked files changed from that merge base to the current worktree plus untracked non-ignored files. Exclude deleted files, ignored files, directories, and submodules; use NUL-safe Git output, de-duplicate, and validate all files before writing. An empty result is reported explicitly. `--dry-run` also reports the resolved base and selected files.
+Semantic targets are natural-language descriptions, not regexes. In comments or prose, remove the smallest coherent unit that hides the target. Never change executable code, identifiers, or behavior-affecting config values; report those matches for human review.
 
-Resolve automatic session and `worktree` scope before validation or scanning, in this order: (1) a literal `--files <path>` is always in scope; (2) exclude known agent/tool control state such as `.planning/**`, recognizable planning-with-files state, and equivalent session plans, logs, or memory; (3) include files directly requested as task deliverables; (4) include human/project-consumed files and exclude agent-only files; (5) use task/session context to decide uncertain cases autonomously. When confidence remains low, preserve and exclude the file without scanning or asking. Ask only if this conservative exclusion would prevent completion of an explicit request. Under `--dry-run`, list conservative exclusions without scanning them. Filename and persistence alone are not decisive: a formal `findings.md` report may be an output, while persistent agent memory is control state.
+Fresh-context review identifies candidate leakage only. Before spawning, the main agent resolves the target and `references/leakage-categories.md` to absolute paths from the loaded Skill location; a missing reference is an installation error. The main agent retains scope, credential scanning, purge classification, confirmation, editing, validation, output, and write logic. If sub-agents are unavailable, report the fallback.
 
-## Session HITL (`--files session` or default)
+For worktree scope, locate the repository from the working directory where the skill is invoked and use local refs only. Resolve the primary branch from the current branch's configured `<remote>/HEAD`, `origin/HEAD`, `origin/main`, local `main`, `origin/master`, then local `master`; stop if unresolved or if `HEAD` has no merge base. Select tracked files changed from that merge base to the current worktree plus untracked non-ignored files. Exclude deleted files, ignored files, directories, and submodules; use NUL-safe Git output, de-duplicate, and validate all files before writing. An empty result is reported explicitly. Preview intent also reports the resolved base and selected files.
 
-Inventories files created or modified through file-editing tools in the current session; Git status must not expand the set. Resolve output-artifact eligibility autonomously before scanning, conservatively excluding low-confidence files. Then scan eligible files for the five categories and any user targets. With `--use-subagent`, the sub-agent supplies candidate locations only; the main agent performs credential scanning, purge classification, tiering, confirmation, and execution. If the runtime cannot identify session-modified files, report the limitation and stop. Findings are organized into Tier 0 (Security Critical — credentials), Tier 1 (purge candidates), Tier 2 (inline leakage and user-target matches), and Tier 3 (session-level concerns). For zero findings, briefly report that no AI leakage was found; mention user-specified content only when targets were supplied.
+Resolve automatic session and `worktree` scope before validation or scanning, in this order: (1) a file explicitly assigned as a cleanup input is in scope, while target-only and excluded path mentions are not; (2) exclude known agent/tool control state such as `.planning/**`, recognizable planning-with-files state, and equivalent session plans, logs, or memory; (3) include files directly requested as task deliverables; (4) include human/project-consumed files and exclude agent-only files; (5) use task/session context to decide uncertain cases autonomously. When confidence remains low, preserve and exclude the file without scanning or asking. Ask only if this conservative exclusion would prevent completion of an explicit request. Under preview intent, list conservative exclusions without scanning them. Filename and persistence alone are not decisive: a formal `findings.md` report may be an output, while persistent agent memory is control state.
+
+## Session HITL (requested or default session scope)
+
+Inventories files created or modified through file-editing tools in the current session; Git status must not expand the set. Resolve output-artifact eligibility autonomously before scanning, conservatively excluding low-confidence files. Then scan eligible files for the five categories and any user targets. With fresh-context sub-agent intent, the sub-agent supplies candidate locations only; the main agent performs credential scanning, purge classification, tiering, confirmation, and execution. If the runtime cannot identify session-modified files, report the limitation and stop. Findings are organized into Tier 0 (Security Critical — credentials), Tier 1 (purge candidates), Tier 2 (inline leakage and user-target matches), and Tier 3 (session-level concerns). For zero findings, briefly report that no AI leakage was found; mention user-specified content only when targets were supplied.
 
 ## Rules
 
-- **No leakage found (non-HITL)**: do nothing, say nothing, unless `--use-subagent` had to report a non-isolated fallback.
+- **No leakage found (non-HITL)**: do nothing, say nothing, unless fresh-context detection had to report a non-isolated fallback.
+- **Silent completion**: after the final successful verification tool call, emit no assistant text at all; never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize removed content.
 - **Multi-line leakage blocks**: remove the whole block.
 - **After stripping, re-read once** to verify structural integrity.
 - **Preserve line endings**: detect and preserve LF vs CRLF.
