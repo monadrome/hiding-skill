@@ -1,0 +1,86 @@
+skills/hide/references/output-modes.md
+  s_cf2ef6f2cd43da::t_47196860f183a2 3,13
+skills/hide/references/reporting.md
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 9
+  s_cf2ef6f2cd43da::t_899ecacaaecdb0 5
+  s_cf2ef6f2cd43da::t_e9b3e677fc516c 13
+skills/hide/SKILL.md
+  s_cf2ef6f2cd43da::t_47196860f183a2 6,31,34,36-45,47-51,53,65-67,69-70
+  s_cf2ef6f2cd43da::t_899ecacaaecdb0 22,118
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 20,97
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 55,57
+skills/hide/references/leakage-categories.md
+  s_cf2ef6f2cd43da::t_6b5b31dc9de3b9 43
+docs/en/examples.md
+  s_cf2ef6f2cd43da::t_35fd73618ccd6a 103
+  s_cf2ef6f2cd43da::t_ab0eb8f3782877 108,117
+docs/zh/hiding-vs-humanizer.md
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 25,50,62,74
+AGENTS.md
+  s_cf2ef6f2cd43da::t_899ecacaaecdb0 77
+  s_cf2ef6f2cd43da::t_09aeeac7129ea1 50,52,55,58,62,66,69-70
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 60,68
+  s_cf2ef6f2cd43da::t_6b5b31dc9de3b9 72,76
+  s_cf2ef6f2cd43da::t_e9b3e677fc516c 64
+skills/hide/references/user-targets.md
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 7-8
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 12
+README-zh.md
+  s_cf2ef6f2cd43da::t_a99f52fcb11629 25,31,34,103,109,127,130,133,141,149,157,162,189,192,194,197,200,202-206,208,227,231
+  s_cf2ef6f2cd43da::t_06e438d3d37cd9 152
+.claude-plugin/plugin.json
+  s_cf2ef6f2cd43da::t_09aeeac7129ea1 4
+skills/hide/references/worktree-mode.md
+  s_cf2ef6f2cd43da::t_47196860f183a2 3
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 12,16
+CLAUDE.md
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 83
+skills/hide/references/automatic-scope.md
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 7
+  s_cf2ef6f2cd43da::t_47196860f183a2 3
+skills/hide/references/session-mode.md
+  s_cf2ef6f2cd43da::t_6b5b31dc9de3b9 34
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 13,17
+  s_cf2ef6f2cd43da::t_47196860f183a2 3
+docs/zh/examples.md
+  s_cf2ef6f2cd43da::t_ab0eb8f3782877 108,117
+  s_cf2ef6f2cd43da::t_35fd73618ccd6a 103
+package.json
+  s_cf2ef6f2cd43da::t_09aeeac7129ea1 3
+CHANGELOG.md
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 14
+  s_cf2ef6f2cd43da::t_01bf9fdec9ca14 16
+  s_cf2ef6f2cd43da::t_09aeeac7129ea1 8-13,15
+  s_cf2ef6f2cd43da::t_899ecacaaecdb0 17
+scripts/check-skill-contract.js
+  s_cf2ef6f2cd43da::t_80a15f1e255d25 217-221,224-225
+  s_cf2ef6f2cd43da::t_211ac526ff783c 125
+  s_cf2ef6f2cd43da::t_899ecacaaecdb0 126,172-173,181
+  s_cf2ef6f2cd43da::t_e9b3e677fc516c 131
+  s_cf2ef6f2cd43da::t_42b50a43a5301f 119,139-141,144-145,162-164,196,216,222-223
+  s_cf2ef6f2cd43da::t_c0247d653b4ab6 98-104,165-169,215,226
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 66-67,127,170
+README.md
+  s_cf2ef6f2cd43da::t_06e438d3d37cd9 156
+  s_cf2ef6f2cd43da::t_e7bfa3d9941c5c 29,35,38,107,113,131,134,137,145,153,161,166,193,196,198,201,204,206-210,212,231,235
+skills/hide/references/subagent-review.md
+  s_cf2ef6f2cd43da::t_6b5b31dc9de3b9 17
+  s_cf2ef6f2cd43da::t_47196860f183a2 3
+  s_cf2ef6f2cd43da::t_532d4e2ca2b0e4 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.35-trip",
+  "base_commit_sha": "d0555ae58b2dca7aa45659c129db0bb449ca23eb",
+  "prompts": {},
+  "sessions": {
+    "s_cf2ef6f2cd43da": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fa383-a640-7a33-afe6-c8c99b0bd25d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "linqh <linqh@trip.com>"
+    }
+  }
+}
