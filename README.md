@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/hiding-hero.png" alt="AI-generated text being erased" width="240">
+  <img src="https://raw.githubusercontent.com/HuaTalk/hiding-skill/main/docs/images/hiding-hero.png" alt="AI-generated text being erased" width="240">
 </p>
 
 # Hiding

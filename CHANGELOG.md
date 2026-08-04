@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Made dependency installation and repository checks reproducible across local, pull-request, and release workflows.
+- Added package inspection, pinned CI actions, and main-branch ancestry protection to the release path.
+- Kept the repository hero image out of the runtime npm package while preserving it in the rendered README.
+
 ## [0.9.1] - 2026-07-27
 
 ### Changed

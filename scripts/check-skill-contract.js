@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const yaml = require('js-yaml');
 
 const root = path.join(__dirname, '..');
 const skillDir = path.join(root, 'skills', 'hide');
@@ -55,6 +56,16 @@ if (!frontmatterMatch) {
   fail('SKILL.md frontmatter is missing or malformed.');
 } else {
   const frontmatter = frontmatterMatch[1];
+  try {
+    const parsed = yaml.load(frontmatter);
+    if (!parsed || typeof parsed !== 'object') fail('SKILL.md frontmatter must be a YAML mapping.');
+    if (typeof parsed?.name !== 'string' || typeof parsed?.description !== 'string') {
+      fail('SKILL.md frontmatter must include string name and description fields.');
+    }
+    if (typeof parsed?.metadata?.version !== 'string') fail('SKILL.md frontmatter metadata.version is missing.');
+  } catch (error) {
+    fail(`SKILL.md frontmatter is invalid YAML: ${error.message}`);
+  }
   if (frontmatterValue(frontmatter, 'name') !== 'hide') {
     fail('SKILL.md name must be hide.');
   }
@@ -102,6 +113,39 @@ const publicDocumentationFiles = [
   path.join(root, 'README-zh.md'),
   ...walkMarkdown(path.join(root, 'docs')),
 ];
+
+for (const documentationPath of publicDocumentationFiles) {
+  const content = read(documentationPath);
+  const base = path.dirname(documentationPath);
+  for (const linkMatch of content.matchAll(/\]\((?!https?:|mailto:|#)([^)#]+)(?:#[^)]+)?\)/g)) {
+    let target;
+    try {
+      target = path.resolve(base, decodeURIComponent(linkMatch[1]));
+    } catch (error) {
+      fail(`${path.relative(root, documentationPath)} has an invalid local link ${linkMatch[1]}: ${error.message}`);
+      continue;
+    }
+    if (target !== root && !target.startsWith(`${root}${path.sep}`)) {
+      fail(`${path.relative(root, documentationPath)} links outside the repository: ${linkMatch[1]}`);
+    } else if (!fs.existsSync(target)) {
+      fail(`${path.relative(root, documentationPath)} links to missing file: ${linkMatch[1]}`);
+    }
+  }
+}
+
+const cjk = /[\u3400-\u4dbf\u4e00-\u9fff]/;
+for (const documentationPath of [path.join(root, 'README.md'), ...walkMarkdown(path.join(root, 'docs', 'en'))]) {
+  if (cjk.test(read(documentationPath))) {
+    fail(`${path.relative(root, documentationPath)} must contain English user documentation only.`);
+  }
+}
+
+const englishSections = (read(path.join(root, 'README.md')).match(/^## /gm) || []).length;
+const chineseSections = (read(path.join(root, 'README-zh.md')).match(/^## /gm) || []).length;
+if (englishSections !== chineseSections) {
+  fail(`README section counts differ: English=${englishSections}, Chinese=${chineseSections}`);
+}
+
 for (const referencePath of referenceFiles) {
   if (!linkedReferences.has(referencePath)) {
     fail(`Reference is not linked directly from SKILL.md: ${path.relative(skillDir, referencePath)}`);
@@ -155,9 +199,6 @@ if (skill.indexOf('(references/automatic-scope.md)') > skill.indexOf('(reference
 }
 
 const corpus = [skill, ...referenceFiles.map(read)].join('\n');
-if (/\/hiding(?![-A-Za-z0-9_])/.test(corpus)) {
-  fail('Legacy /hiding invocation found in the installed skill.');
-}
 const requiredInlineContracts = [
   ['natural-language request parsing', /Treat the full invocation text after `\/hide` as a natural-language request/],
   ['no mandatory legacy grammar', /Do not require users to quote multi-word targets, place targets before options, or use exact flag syntax/],
@@ -212,7 +253,15 @@ for (const [flag, pattern] of staleFlags) {
   if (pattern.test(corpus)) fail(`Stale flag found in the installed skill: ${flag}`);
 }
 
-const publicContractCorpus = [corpus, ...publicDocumentationFiles.map(read)].join('\n');
+const publicContractCorpus = [
+  corpus,
+  ...publicDocumentationFiles.map(read),
+  read(path.join(root, '.claude-plugin', 'plugin.json')),
+  read(path.join(root, '.claude-plugin', 'marketplace.json')),
+].join('\n');
+if (/\/hiding(?![-:A-Za-z0-9_])|skills\/hiding(?:\/|$)/m.test(publicContractCorpus)) {
+  fail('Legacy /hiding invocation or skills/hiding path found in current project files.');
+}
 const strictGrammarPatterns = [
   ['targets before flags', /targets?\s+must\s+(?:precede\b|(?:appear|be placed)\s+before\b)/i, 'Targets must precede the first flag.'],
   ['quoted targets containing spaces', /quote\s+targets?\s+containing\s+spaces|targets?\s+containing\s+spaces\s+must\s+be\s+quoted/i, 'Quote targets containing spaces.'],
@@ -224,6 +273,45 @@ const strictGrammarPatterns = [
 for (const [label, pattern, regressionSample] of strictGrammarPatterns) {
   if (!pattern.test(regressionSample)) fail(`Legacy strict argument grammar detector is ineffective: ${label}.`);
   if (pattern.test(publicContractCorpus)) fail(`Legacy strict argument grammar remains: ${label}.`);
+}
+
+for (const relativePath of ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', 'package.json']) {
+  try {
+    JSON.parse(read(path.join(root, relativePath)));
+  } catch (error) {
+    fail(`${relativePath}: invalid JSON: ${error.message}`);
+  }
+}
+
+for (const relativePath of ['.github/workflows/test.yml', '.github/workflows/publish.yml']) {
+  try {
+    yaml.load(read(path.join(root, relativePath)));
+  } catch (error) {
+    fail(`${relativePath}: invalid YAML: ${error.message}`);
+  }
+}
+
+try {
+  const packageManifest = JSON.parse(read(path.join(root, 'package.json')));
+  if ('main' in packageManifest) fail('package.json must not declare a JavaScript entry point for this data-only package.');
+  if (packageManifest.scripts?.prepublishOnly !== 'npm test') {
+    fail('package.json must run repository checks before manual publication.');
+  }
+} catch {
+  // The manifest parser above already reports malformed JSON.
+}
+
+try {
+  const packageLock = JSON.parse(read(path.join(root, 'package-lock.json')));
+  for (const [dependencyPath, metadata] of Object.entries(packageLock.packages || {})) {
+    if (!metadata.resolved) continue;
+    const registry = new URL(metadata.resolved).hostname;
+    if (registry !== 'registry.npmjs.org') {
+      fail(`package-lock.json uses a non-public registry for ${dependencyPath}: ${registry}`);
+    }
+  }
+} catch (error) {
+  fail(`package-lock.json: invalid lock data: ${error.message}`);
 }
 
 if (failures.length > 0) {

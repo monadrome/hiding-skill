@@ -12,8 +12,10 @@ This repo has no runtime implementation or build. It contains skill definitions,
 | Pattern reference card | `AGENTS.md` |
 | User-facing install/usage docs | `README.md`, `README-zh.md` |
 | Version bump | `.claude-plugin/plugin.json`, `package.json`, `SKILL.md` frontmatter (`metadata.version`) |
-| Static Skill invariants | `scripts/check-skill-contract.js` |
-| CI checks | `.github/workflows/test.yml` |
+| Static Skill and repository invariants | `scripts/check-skill-contract.js` |
+| Version parsing and release-tag alignment | `scripts/check-versions.js` |
+| CI checks | `.github/workflows/test.yml`, `.github/workflows/publish.yml` |
+| Dependency changes | `package.json`, `package-lock.json` |
 
 ## Making a change
 
@@ -21,7 +23,7 @@ This repo has no runtime implementation or build. It contains skill definitions,
 2. Keep `AGENTS.md` (the condensed reference card) in sync if the pattern logic, output modes, flags, or execution rules changed.
 3. Keep `README.md` and `README-zh.md` in sync if user-facing behavior changed. The two READMEs must say the same thing.
 4. Update `CHANGELOG.md`.
-5. Run `npm test` - it verifies version consistency, static Skill contract anchors, and local reference integrity. This does not replace agent-level behavior validation.
+5. Run `npm ci && npm test` - it verifies version consistency, static Skill contract anchors, repository metadata, documentation links, and local reference integrity. This does not replace agent-level behavior validation.
 
 ## Language conventions
 
@@ -38,7 +40,7 @@ Silent execution is the default. Any user-visible output must be required by the
 ## Releasing (maintainers)
 
 1. Bump the version in all three files: `.claude-plugin/plugin.json`, `package.json`, `SKILL.md` frontmatter.
-2. `npm test` must pass.
+2. `npm ci && npm test` must pass.
 3. Move the `Unreleased` CHANGELOG entry to the release date.
 4. Run `npm pack --dry-run` and verify that the package contains every local file linked from the READMEs.
 5. Tag `vX.Y.Z` and push. CI validates the tag version and publishes to the official npm registry.
