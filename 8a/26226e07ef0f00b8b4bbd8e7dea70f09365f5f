@@ -1,0 +1,40 @@
+CHANGELOG.md
+  s_a039feb03176f6::t_37e61894c9ab87 14
+  s_a039feb03176f6::t_fa39337a77b168 8-13,15
+CONTRIBUTING.md
+  s_a039feb03176f6::t_4c50a7b4aebf48 15-18,26,43
+.github/workflows/test.yml
+  s_a039feb03176f6::t_fa39337a77b168 9-15,20,22,25-28,33-34
+.github/workflows/publish.yml
+  s_a039feb03176f6::t_fa39337a77b168 11-14,21-24,27-29,32-38,40
+package.json
+  s_a039feb03176f6::t_37e61894c9ab87 36-37
+  s_a039feb03176f6::t_fa39337a77b168 3,46-53
+skills/hide/SKILL.md
+  s_a039feb03176f6::t_fa39337a77b168 6
+README.md
+  s_a039feb03176f6::t_37e61894c9ab87 2
+scripts/check-skill-contract.js
+  s_a039feb03176f6::t_017b81698326a7 262
+  s_a039feb03176f6::t_4c50a7b4aebf48 6,59-68,116-148,256-261,263-264,278-314
+.claude-plugin/plugin.json
+  s_a039feb03176f6::t_fa39337a77b168 4
+scripts/check-versions.js
+  s_a039feb03176f6::t_fa39337a77b168 4,7-9,11-13,16,18-24,29-36,38-39,41-42,45-47,53-54,57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.35-trip",
+  "base_commit_sha": "8a26226e07ef0f00b8b4bbd8e7dea70f09365f5f",
+  "prompts": {},
+  "sessions": {
+    "s_a039feb03176f6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fcaab-f074-7963-890c-7b2274e9ce48",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "linqh <linqh@trip.com>"
+    }
+  }
+}
