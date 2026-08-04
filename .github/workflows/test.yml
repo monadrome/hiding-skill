@@ -6,57 +6,29 @@ on:
     tags: ['v*']
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
+          cache: npm
+
+      - name: Install development dependencies
+        run: npm ci
 
       - name: Check repository contracts
         run: npm test
 
-      - name: Check removed skill identifier
-        run: |
-          if git grep -n -P '/hiding(?![-:[:alnum:]_])|skills/hiding(?:/|$)' -- ':!CHANGELOG.md' ':!.github/workflows/test.yml' ':!scripts/check-skill-contract.js'; then
-            echo 'ERROR: Current files must use /hide and skills/hide.'
-            exit 1
-          fi
-          echo 'OK: no current /hiding invocation or skills/hiding path remains'
-
-      - name: Validate plugin JSON
-        run: |
-          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
-            node -e "JSON.parse(require('fs').readFileSync('$f','utf8')); console.log('$f: valid')"
-          done
-
-      - name: Check English docs have no Chinese characters
-        run: |
-          if grep -Pn '[\x{4e00}-\x{9fff}\x{3400}-\x{4dbf}]' README.md docs/en/*.md; then
-            echo 'ERROR: English docs (README.md, docs/en/) must not contain Chinese characters.'
-            exit 1
-          fi
-          echo 'OK: no Chinese characters in README.md or docs/en/'
-
-      - name: Check SKILL.md frontmatter
-        run: |
-          npm install --no-save js-yaml
-          node -e "
-          const fs = require('fs');
-          const yaml = require('js-yaml');
-          const content = fs.readFileSync('skills/hide/SKILL.md', 'utf8');
-          if (!content.startsWith('---')) { console.error('Missing frontmatter'); process.exit(1); }
-          const end = content.indexOf('\n---', 3);
-          if (end === -1) { console.error('Unterminated frontmatter'); process.exit(1); }
-          const fm = yaml.load(content.substring(3, end));
-          if (!fm || typeof fm !== 'object') { console.error('Frontmatter is not a YAML mapping'); process.exit(1); }
-          for (const field of ['name', 'description']) {
-            if (typeof fm[field] !== 'string' || !fm[field].trim()) { console.error('Missing or empty ' + field + ' in frontmatter'); process.exit(1); }
-          }
-          if (fm.name !== 'hide') { console.error('Skill name must be hide'); process.exit(1); }
-          if (!fm.metadata || typeof fm.metadata.version !== 'string') { console.error('Missing metadata.version in frontmatter'); process.exit(1); }
-          console.log('SKILL.md frontmatter: valid YAML, name/description/metadata.version present');
-          "
+      - name: Inspect publish contents
+        run: npm pack --dry-run

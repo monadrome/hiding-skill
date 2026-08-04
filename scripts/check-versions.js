@@ -1,91 +1,58 @@
 #!/usr/bin/env node
-// Version-consistency guard. Hiding declares its version in multiple files
-// across different host ecosystems. Every release must bump all of them.
-//
-// This check ensures:
-//   1. every version-bearing file shares one pinned X.Y.Z version
-//   2. on a release-tag CI run, that shared version equals the tag
-
 const fs = require('fs');
 const path = require('path');
+const yaml = require('js-yaml');
 
 const root = path.join(__dirname, '..');
-const PINNED_SEMVER = /^\d+\.\d+\.\d+$/;
-
-const VERSION_FILES = [
-  '.claude-plugin/plugin.json',   // Claude Code plugin
-  'package.json',                 // npm / repo root
-];
-
-function readVersion(relPath) {
-  try {
-    const raw = fs.readFileSync(path.join(root, relPath), 'utf8').replace(/^﻿/, '');
-    return JSON.parse(raw).version;
-  } catch (e) {
-    throw new Error(`${relPath}: ${e.message}`);
-  }
-}
-
-let failed = false;
+const semver = /^\d+\.\d+\.\d+$/;
 const versions = [];
+let failed = false;
 
-for (const relPath of VERSION_FILES) {
-  let version;
+function fail(message) {
+  console.error(message);
+  failed = true;
+}
+
+for (const relativePath of ['package.json', '.claude-plugin/plugin.json']) {
   try {
-    version = readVersion(relPath);
-  } catch (e) {
-    console.error(e.message);
-    failed = true;
-    continue;
-  }
-  if (typeof version !== 'string' || !PINNED_SEMVER.test(version)) {
-    console.error(`${relPath}: version must be a pinned X.Y.Z semver, got ${JSON.stringify(version)}`);
-    failed = true;
-  }
-  versions.push([relPath, version]);
-}
-
-// SKILL.md metadata version
-try {
-  const skillRaw = fs.readFileSync(path.join(root, 'skills/hide/SKILL.md'), 'utf8');
-  const skillMatch = skillRaw.match(/version:\s*["']?([^"'\s]+)["']?/);
-  if (skillMatch) {
-    versions.push(['skills/hide/SKILL.md', skillMatch[1]]);
-    if (!PINNED_SEMVER.test(skillMatch[1])) {
-      console.error(`skills/hide/SKILL.md: version must be a pinned X.Y.Z semver, got ${JSON.stringify(skillMatch[1])}`);
-      failed = true;
+    const value = JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8')).version;
+    if (typeof value !== 'string' || !semver.test(value)) {
+      fail(`${relativePath}: version must be pinned X.Y.Z semver, got ${JSON.stringify(value)}`);
     }
-  } else {
-    console.error('skills/hide/SKILL.md: no version field found in frontmatter (expected version: "X.Y.Z")');
-    failed = true;
+    versions.push([relativePath, value]);
+  } catch (error) {
+    fail(`${relativePath}: ${error.message}`);
   }
-} catch (e) {
-  console.error(`skills/hide/SKILL.md: ${e.message}`);
-  failed = true;
 }
 
-// Every file must declare the same version
-const distinct = [...new Set(versions.map(([, v]) => v))];
-if (distinct.length > 1) {
-  console.error('Version mismatch — every manifest must share one version:');
-  for (const [relPath, version] of versions) console.error(`  ${version}\t${relPath}`);
-  failed = true;
+try {
+  const relativePath = 'skills/hide/SKILL.md';
+  const content = fs.readFileSync(path.join(root, relativePath), 'utf8');
+  const frontmatterEnd = content.indexOf('\n---', 3);
+  if (!content.startsWith('---\n') || frontmatterEnd < 0) throw new Error('invalid frontmatter delimiters');
+  const frontmatter = yaml.load(content.slice(3, frontmatterEnd));
+  const value = frontmatter?.metadata?.version;
+  if (typeof value !== 'string') {
+    fail(`${relativePath}: metadata.version is missing`);
+  } else {
+    if (!semver.test(value)) fail(`${relativePath}: version must be pinned X.Y.Z semver`);
+    versions.push([relativePath, value]);
+  }
+} catch (error) {
+  fail(`skills/hide/SKILL.md: ${error.message}`);
+}
+
+const distinct = [...new Set(versions.map(([, version]) => version))];
+if (distinct.length !== 1) {
+  fail(`Version mismatch: ${versions.map(([file, version]) => `${file}=${version}`).join(', ')}`);
 }
 const shared = distinct.length === 1 ? distinct[0] : null;
 
-// On release-tag push, version must match tag
 if (shared && process.env.GITHUB_REF_TYPE === 'tag') {
   const tag = process.env.GITHUB_REF_NAME || '';
-  const tagVersion = tag.replace(/^v/, '');
-  if (PINNED_SEMVER.test(tagVersion) && tagVersion !== shared) {
-    console.error(`release tag ${tag} does not match version ${shared}; bump the version files before tagging`);
-    failed = true;
-  }
+  const expected = `v${shared}`;
+  if (tag !== expected) fail(`Release tag ${JSON.stringify(tag)} must exactly match ${expected}`);
 }
 
-if (failed) {
-  console.error('Align the version fields so every manifest shares one version.');
-  process.exit(1);
-}
-
+if (failed) process.exit(1);
 console.log(`All ${versions.length} version files pinned at ${shared}.`);
