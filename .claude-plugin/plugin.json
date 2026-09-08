@@ -1,7 +1,7 @@
 {
   "name": "hiding-skill",
   "description": "Strategically remove AI leakage, exposed constraints, provenance clues, credentials, and user-specified sensitive content from files without changing executable behavior.",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "author": {
     "name": "monadrome",
     "url": "https://github.com/monadrome"

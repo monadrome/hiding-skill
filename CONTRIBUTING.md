@@ -54,11 +54,11 @@ machine-wide npm configuration.
 Before the first publication:
 
 1. Sign in explicitly against the official registry:
-   `npm login --scope=@huatalk --registry=https://registry.npmjs.org/`.
+   `npm login --scope=@monadrome --registry=https://registry.npmjs.org/`.
 2. Run `npm whoami --registry=https://registry.npmjs.org/`. If it returns
-   `huatalk`, the account owns the matching personal scope. If `@huatalk` is an
-   organization scope instead, run
-   `npm org ls huatalk --registry=https://registry.npmjs.org/` and confirm in
+   `monadrome`, the account owns the matching personal scope. If `@monadrome` is
+   an organization scope instead, run
+   `npm org ls monadrome --registry=https://registry.npmjs.org/` and confirm in
    the npm organization settings that the account may create packages.
 3. Create a short-lived or granular npm access token with publish permission and
    store it as the repository secret `NPM_TOKEN`.
@@ -67,8 +67,19 @@ Before the first publication:
    because npm Trusted Publisher cannot be configured until the package exists.
 
 After the first package exists, configure Trusted Publisher on the npm package
-`@huatalk/hiding-skill` with GitHub owner `monadrome`, repository `hiding-skill`,
+`@monadrome/hiding-skill` with GitHub owner `monadrome`, repository `hiding-skill`,
 and workflow filename `publish.yml`. Then delete the `NPM_TOKEN` repository
 secret. Subsequent `v*` tag pushes publish through GitHub Actions OIDC and do not
 read an npm token. The workflow's `id-token: write` permission and `npm@latest`
 installation are required for that path.
+
+### Renaming the npm package
+
+npm cannot rename a published package or an account. A scope change therefore
+means publishing a new package and retiring the old name:
+
+1. Publish `@monadrome/hiding-skill` as a first publication (above).
+2. Deprecate the old name so existing installs warn on update:
+   `npm deprecate @huatalk/hiding-skill "renamed to @monadrome/hiding-skill" --registry=https://registry.npmjs.org/`.
+3. Keep the old package published. Unpublishing breaks lockfiles and installs
+   still pointing at the old name.

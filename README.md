@@ -19,7 +19,7 @@ Hiding is a strategic content-cleanup Skill for coding agents. Use it whenever a
 Install `/hide` from npm:
 
 ```bash
-npm install -D @huatalk/hiding-skill
+npm install -D @monadrome/hiding-skill
 npx skills-npm setup
 ```
 
@@ -41,7 +41,7 @@ Describe another scope or cleanup goal in the same way: [specific files](#specif
 
 `/hide` runs on demand after content exists, not throughout the agent's normal reasoning process. The target may be a draft, an existing file, a review or handoff artifact, or release-ready output.
 
-For automatic `session` and `worktree` scopes, it resolves which files are user-facing outputs and excludes agent control state, planning metadata, build output, and unrelated files.
+For automatic `session` and `worktree` scopes, it splits candidates into deliverables and agent support files. Code, articles, reports, and other human-facing outputs are scanned; agent instruction files, planning state, progress logs, memory, build output, and unrelated files are left untouched unless you name them explicitly.
 
 Next, it scans eligible files for five built-in leakage categories, credentials, and any one-off semantic targets supplied by the user. It distinguishes removable comments and prose from executable code and behavior-affecting configuration.
 
@@ -71,7 +71,7 @@ Installation depends on how your coding agent loads Skills.
 For environments using `skills-npm`:
 
 ```bash
-npm install -D @huatalk/hiding-skill
+npm install -D @monadrome/hiding-skill
 npx skills-npm setup
 ```
 
@@ -145,7 +145,7 @@ Targets are interpreted semantically, not as regular expressions. Quoting and fi
 /hide preview the files changed in this session
 ```
 
-The default scope is files created or modified through file-editing tools in the current agent session. Git status may provide context but does not expand this inventory.
+The default scope is files created or modified through file-editing tools in the current agent session. Git status may provide context but does not expand this inventory. Agent support files — instruction files such as `AGENTS.md` and `CLAUDE.md`, planning state, progress logs, and agent memory — are excluded by default; name them explicitly to include them.
 
 #### Specific Files
 
@@ -232,7 +232,7 @@ For important files, start by asking for a preview, inspect credential and confi
 
 ## Updating
 
-Version 0.9.1 accepts natural-language requests and keeps the previous flags as optional compatibility aliases. Version 0.9.0 renamed the installed skill command to `/hide`; the pre-0.9 command is not included as an alias.
+Version 0.10.0 publishes the npm package under the `@monadrome` scope; replace `@huatalk/hiding-skill` with `@monadrome/hiding-skill` in your dependency list. Version 0.9.1 accepts natural-language requests and keeps the previous flags as optional compatibility aliases. Version 0.9.0 renamed the installed skill command to `/hide`; the pre-0.9 command is not included as an alias.
 
 Agent Skills:
 

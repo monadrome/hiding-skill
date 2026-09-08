@@ -3,7 +3,7 @@ name: hide
 description: Strategically remove AI leakage, provenance clues, exposed constraints, credentials, and any user-specified content from files without changing executable behavior. Use for concealment or release hygiene. Triggers include clean AI traces, hide source, hide constraints, 隐藏 AI 痕迹、清理规则、隐藏数据来源、隐藏约束、清理 xxx 痕迹。
 metadata:
   author: monadrome
-  version: "0.9.2"
+  version: "0.10.0"
   category: output-discipline
 ---
 
@@ -22,7 +22,7 @@ metadata:
 - Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path.
 - Always warn and recommend rotation when credentials are found.
 - Require explicit confirmation before deleting an entire file.
-- Automatically scan deliverables, not agent control-plane or planning state.
+- Automatically scan deliverables, not agent support files — instruction and rule files, planning state, progress logs, or agent memory — which are processed only when the user names them.
 - Preserve behavior across supported agent environments.
 
 ## Usage

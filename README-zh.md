@@ -15,7 +15,7 @@ Hiding 是面向编码 Agent 的策略性内容清理 Skill。当文件需要减
 通过 npm 安装 `/hide`：
 
 ```bash
-npm install -D @huatalk/hiding-skill
+npm install -D @monadrome/hiding-skill
 npx skills-npm setup
 ```
 
@@ -37,7 +37,7 @@ npx skills-npm setup
 
 `/hide` 在内容产生后按需运行，而不是持续干预 Agent 的正常推理过程。目标可以是草稿、既有文件、待审查或交接的产物，也可以是准备发布的输出。
 
-使用 `session` 或 `worktree` 自动选取时，它会识别面向用户的产物，并排除 Agent 控制状态、规划元数据、构建输出和无关文件。
+使用 `session` 或 `worktree` 自动选取时，它会把候选文件分成产出物和 Agent 支持文件：代码、文章、报告等面向人的产物会被扫描；Agent 指令文件、规划状态、进度日志、记忆、构建输出和无关文件默认不动，除非你显式指定。
 
 接着，它扫描五类内置泄露内容、凭据和用户提供的一次性语义目标，并区分可以移除的注释或 prose 与可执行代码、会影响行为的配置。
 
@@ -67,7 +67,7 @@ const UserProfile = memo(({ user }) => {
 适用于使用 `skills-npm` 的环境：
 
 ```bash
-npm install -D @huatalk/hiding-skill
+npm install -D @monadrome/hiding-skill
 npx skills-npm setup
 ```
 
@@ -141,7 +141,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 /hide 预览当前会话中修改过的文件
 ```
 
-默认范围是当前 Agent 会话中通过文件编辑工具创建或修改的文件。Git 状态可以提供上下文，但不会扩大该清单。
+默认范围是当前 Agent 会话中通过文件编辑工具创建或修改的文件。Git 状态可以提供上下文，但不会扩大该清单。Agent 支持文件——`AGENTS.md`、`CLAUDE.md` 等指令文件，以及规划状态、进度日志和 Agent 记忆——默认排除；显式点名才会纳入。
 
 #### 指定文件
 
@@ -228,7 +228,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 
 ## 更新
 
-v0.9.1 支持自然语言请求，并将原有 flags 保留为可选兼容写法。v0.9.0 将安装后的 Skill 命令改为 `/hide`；v0.9.0 之前的命令不会作为别名继续提供。
+v0.10.0 将 npm 包迁移到 `@monadrome` scope；请把依赖里的 `@huatalk/hiding-skill` 换成 `@monadrome/hiding-skill`。v0.9.1 支持自然语言请求，并将原有 flags 保留为可选兼容写法。v0.9.0 将安装后的 Skill 命令改为 `/hide`；v0.9.0 之前的命令不会作为别名继续提供。
 
 Agent Skills：
 

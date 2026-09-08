@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-09-08
+
+### Breaking Changes
+
+- Moved the npm package from `@huatalk/hiding-skill` to `@monadrome/hiding-skill` after the GitHub account rename. npm cannot rename a published package, so `@monadrome/hiding-skill` is a new package; `@huatalk/hiding-skill` is deprecated and should be replaced in dependency lists.
+
+### Changed
+
+- Split automatic scope eligibility into deliverables and agent support files. Instruction and rule files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules/**`, `.github/copilot-instructions.md`), planning and progress state, and agent memory are excluded by default and processed only when the user names them.
+- Moved the agent-support exclusion ahead of the task-deliverable rule, so a support file stays excluded even when the current task created or updated it.
+- Added contract checks that fail when the agent-support exclusion, its precedence, the explicit-selection override, or the consumer test for ambiguous collections is removed.
+
+## [0.9.2] - 2026-08-03
+
 ### Changed
 
 - Made dependency installation and repository checks reproducible across local, pull-request, and release workflows.
