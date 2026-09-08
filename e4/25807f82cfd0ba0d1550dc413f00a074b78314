@@ -1,0 +1,21 @@
+.gitignore
+  s_abd7db19ba9b5d::t_895e561b464acd 22-25
+AGENTS.md
+  s_abd7db19ba9b5d::t_f1414015ed5137 89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.43-trip",
+  "base_commit_sha": "e425807f82cfd0ba0d1550dc413f00a074b78314",
+  "prompts": {},
+  "sessions": {
+    "s_abd7db19ba9b5d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "230ec7cc-836b-43c3-9eee-bb4edc2ed71f",
+        "model": "deepseek-v4.1-flash-expires-on-0910"
+      },
+      "human_author": "linqh <linqh@trip.com>"
+    }
+  }
+}
