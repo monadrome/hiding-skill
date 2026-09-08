@@ -22,7 +22,7 @@
 > **以便** 不需要研究复杂配置就能开始用
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 **当前状态：** ✅ 已满足。一条命令完成安装，覆盖 70+ 代理。
@@ -300,7 +300,7 @@ jobs:
 ### 典型用户完整旅程
 
 ```
-Day 0   安装     npx skills add HuaTalk/hiding-skill
+Day 0   安装     npx skills add monadrome/hiding-skill
         首次尝试   /hide → （静默）怎么没反应？
         看README  理解静默哲学、三种模式
 

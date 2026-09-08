@@ -11,7 +11,7 @@ Hiding strips AI-generated artifacts, exposed constraints, source/provenance clu
 - Stay silent by default; the cleanup operation must leave no trace.
 - Credential safety overrides silence: warn and recommend rotation whenever credentials are found.
 - Require explicit user confirmation before deleting an entire file.
-- Automatically scan deliverables, not agent control-plane or planning state.
+- Automatically scan deliverables, not agent support files (instruction and rule files such as `AGENTS.md`, planning state, progress logs, memory); agent support files are processed only when the user names them.
 - Keep behavior consistent across supported agent environments.
 
 ## Five Leakage Categories
@@ -65,7 +65,7 @@ Fresh-context review identifies candidate leakage only. Before spawning, the mai
 
 For worktree scope, locate the repository from the working directory where the skill is invoked and use local refs only. Resolve the primary branch from the current branch's configured `<remote>/HEAD`, `origin/HEAD`, `origin/main`, local `main`, `origin/master`, then local `master`; stop if unresolved or if `HEAD` has no merge base. Select tracked files changed from that merge base to the current worktree plus untracked non-ignored files. Exclude deleted files, ignored files, directories, and submodules; use NUL-safe Git output, de-duplicate, and validate all files before writing. An empty result is reported explicitly. Preview intent also reports the resolved base and selected files.
 
-Resolve automatic session and `worktree` scope before validation or scanning, in this order: (1) a file explicitly assigned as a cleanup input is in scope, while target-only and excluded path mentions are not; (2) exclude known agent/tool control state such as `.planning/**`, recognizable planning-with-files state, and equivalent session plans, logs, or memory; (3) include files directly requested as task deliverables; (4) include human/project-consumed files and exclude agent-only files; (5) use task/session context to decide uncertain cases autonomously. When confidence remains low, preserve and exclude the file without scanning or asking. Ask only if this conservative exclusion would prevent completion of an explicit request. Under preview intent, list conservative exclusions without scanning them. Filename and persistence alone are not decisive: a formal `findings.md` report may be an output, while persistent agent memory is control state.
+Resolve automatic session and `worktree` scope before validation or scanning, in this order: (1) a file explicitly assigned as a cleanup input is in scope, while target-only and excluded path mentions are not; (2) exclude agent support files — anything that exists to instruct, plan, log, or remember for a coding agent rather than to be read by a human or project consumer, such as `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/**`, `.github/copilot-instructions.md`, `.planning/**`, recognizable planning-with-files state, and equivalent session plans, logs, or memory; this precedes (3), so a support file stays excluded even when the task created or updated it; (3) include files directly requested as task deliverables; (4) include human/project-consumed files and exclude agent-only files; (5) use task/session context to decide uncertain cases autonomously. When confidence remains low, preserve and exclude the file without scanning or asking. Ask only if this conservative exclusion would prevent completion of an explicit request. Under preview intent, list conservative exclusions without scanning them. Filename and persistence alone are not decisive: a formal `findings.md` report may be an output, while persistent agent memory is control state.
 
 ## Session HITL (requested or default session scope)
 
@@ -85,3 +85,30 @@ Inventories files created or modified through file-editing tools in the current 
 - **Markdown** (.md): Remove paragraphs and sentences matching leakage categories or user targets. Keep technical content.
 - **Config** (.yml, .yaml, .json, .xml, .toml, .env, .properties, .ini, .cfg): Remove leakage comments. Change credential values only when a format-safe placeholder preserves structure; report other behavior-affecting values for human review.
 - **Other**: Remove any comment or prose matching the leakage categories or user targets.
+
+## Token-efficient execution(only for codex cli)
+
+- Minimize model/tool round trips. Batch independent inspections, searches,
+  and verification commands into as few tool calls as practical.
+- Strongly prefer a single tool execution with `Promise.all` with several
+  `tools.shell_command(...)` invocations or at least a single such call with
+  multiple sequential shell commands over multiple overall tool calls.
+- For a straightforward implementation, inspect the relevant files once,
+  implement in one pass where possible, and perform one proportional
+  verification pass.
+- Do not run broad repository searches, dump complete files, or print complete
+  diffs when targeted paths, symbols, ranges, or diff statistics are enough.
+- Do not use web search when the answer can reasonably be determined from the
+  repository, installed source code, or existing project documentation.
+- Do not create ad-hoc verification scripts for small changes unless ordinary
+  project checks cannot validate the behavior.
+- After one failed environmental verification attempt, diagnose narrowly.
+  Avoid repeated retries, polling, and alternative verification mechanisms
+  unless they are necessary to establish correctness.
+- Running an existing focused test or build is normally sufficient. Do not
+  escalate into multiple test, editor, runtime, and debugger verification
+  passes for a low-risk change unless a failure requires it.
+- Keep command output narrow. Prefer targeted `rg`, bounded file ranges,
+  path-specific diffs, and concise status output.
+- Do not read workflow skills merely to perform routine completion checks.
+- If in doubt, ask the user how to proceed.

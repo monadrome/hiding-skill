@@ -164,6 +164,19 @@ if (!/whenever the request uses automatic `session` or `worktree` scope, includi
   fail('Automatic-scope reference must include the default invocation condition.');
 }
 
+const agentSupportContracts = [
+  ['deliverable and agent support-file split', /\*\*Deliverables\*\*[\s\S]{0,240}\*\*Agent support files\*\*/],
+  ['agent instruction files named', /`AGENTS\.md`, `CLAUDE\.md`, `\.cursor\/rules\/\*\*`, `\.github\/copilot-instructions\.md`/],
+  ['agent support rule precedes the task goal', /This rule precedes the task-goal rule/],
+  ['agent support exclusion survives task edits', /stays excluded even when the current task created or updated it/],
+  ['explicit selection overrides the support-file exclusion', /even when it is an agent support file/],
+  ['ambiguous collections judged by consumer', /judged by consumer/],
+];
+
+for (const [label, pattern] of agentSupportContracts) {
+  if (!pattern.test(automaticScope)) fail(`Agent support-file contract is missing: ${label}.`);
+}
+
 const reporting = readRegularFile(path.join(referencesDir, 'reporting.md'));
 const requiredReportingContracts = [
   ['silent tool execution and completion', /use tools without narration and end the turn immediately after successful verification with no assistant text block/],
@@ -217,6 +230,7 @@ const requiredInlineContracts = [
   ['default inplace behavior', /default `inplace` mode replaces the original only after successful validation/],
   ['line endings before writes', /Before any write, preserve the file's original line ending style/],
   ['concurrent modification before writes', /compare mtime with the value observed when reading; if it changed, warn and abort/],
+  ['agent support files excluded by default', /Automatically scan deliverables, not agent support files/],
   ['whole-block removal', /Remove a multi-line leakage block as a whole/],
   ['silent terminal behavior', /the last required tool result is terminal: send no assistant text/],
   ['no post-tool cleanup summary', /Do not acknowledge completion or describe removed content after that tool result/],

@@ -1,6 +1,6 @@
 {
-  "name": "@huatalk/hiding-skill",
-  "version": "0.9.2",
+  "name": "@monadrome/hiding-skill",
+  "version": "0.10.0",
   "description": "Strategic content cleanup for files that should reveal less about their origin, process, AI participation, constraints, or sensitive context.",
   "keywords": [
     "claude-code",
@@ -13,16 +13,16 @@
   ],
   "license": "MIT",
   "author": {
-    "name": "HuaTalk",
-    "url": "https://github.com/HuaTalk"
+    "name": "monadrome",
+    "url": "https://github.com/monadrome"
   },
-  "homepage": "https://github.com/HuaTalk/hiding-skill",
+  "homepage": "https://github.com/monadrome/hiding-skill",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HuaTalk/hiding-skill.git"
+    "url": "git+https://github.com/monadrome/hiding-skill.git"
   },
   "bugs": {
-    "url": "https://github.com/HuaTalk/hiding-skill/issues"
+    "url": "https://github.com/monadrome/hiding-skill/issues"
   },
   "publishConfig": {
     "access": "public",

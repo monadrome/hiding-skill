@@ -26,7 +26,7 @@ The canonical skill is `skills/hide/SKILL.md`; its directly linked references ar
 
 | Channel | Reach | Mechanism |
 |---------|-------|-----------|
-| `npx skills add HuaTalk/hiding-skill` | 70+ agents | Discovers `skills/hide/SKILL.md` from GitHub, symlinks to each agent |
+| `npx skills add monadrome/hiding-skill` | 70+ agents | Discovers `skills/hide/SKILL.md` from GitHub, symlinks to each agent |
 | `/plugin install hiding@hiding` | Claude Code only | Native plugin marketplace via `.claude-plugin/` |
 
 ### Version tracking

@@ -3,8 +3,8 @@
   "name": "hiding",
   "description": "Strategic content cleanup for files that should reveal less about their origin, process, AI participation, constraints, or sensitive context.",
   "owner": {
-    "name": "HuaTalk",
-    "url": "https://github.com/HuaTalk"
+    "name": "monadrome",
+    "url": "https://github.com/monadrome"
   },
   "plugins": [
     {
