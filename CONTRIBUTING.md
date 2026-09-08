@@ -67,7 +67,7 @@ Before the first publication:
    because npm Trusted Publisher cannot be configured until the package exists.
 
 After the first package exists, configure Trusted Publisher on the npm package
-`@huatalk/hiding-skill` with GitHub owner `HuaTalk`, repository `hiding-skill`,
+`@huatalk/hiding-skill` with GitHub owner `monadrome`, repository `hiding-skill`,
 and workflow filename `publish.yml`. Then delete the `NPM_TOKEN` repository
 secret. Subsequent `v*` tag pushes publish through GitHub Actions OIDC and do not
 read an npm token. The workflow's `id-token: write` permission and `npm@latest`

@@ -2,7 +2,7 @@
 name: hide
 description: Strategically remove AI leakage, provenance clues, exposed constraints, credentials, and any user-specified content from files without changing executable behavior. Use for concealment or release hygiene. Triggers include clean AI traces, hide source, hide constraints, 隐藏 AI 痕迹、清理规则、隐藏数据来源、隐藏约束、清理 xxx 痕迹。
 metadata:
-  author: HuaTalk
+  author: monadrome
   version: "0.9.2"
   category: output-discipline
 ---

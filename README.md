@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/HuaTalk/hiding-skill/main/docs/images/hiding-hero.png" alt="AI-generated text being erased" width="240">
+  <img src="https://raw.githubusercontent.com/monadrome/hiding-skill/main/docs/images/hiding-hero.png" alt="AI-generated text being erased" width="240">
 </p>
 
 # Hiding
 
-[![CI](https://github.com/HuaTalk/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/HuaTalk/hiding-skill/actions/workflows/test.yml)
+[![CI](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Chinese](https://img.shields.io/badge/lang-Chinese-blue.svg)](README-zh.md)
 
@@ -80,7 +80,7 @@ npx skills-npm setup
 Use this for Codex, Cursor, Windsurf, Gemini CLI, GitHub Copilot, Cline, and other agents supported by the Agent Skills ecosystem:
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 Agent compatibility and install location are determined by the installer and each agent's Skill implementation.
@@ -90,7 +90,7 @@ Agent compatibility and install location are determined by the installer and eac
 Register the repository as a plugin marketplace:
 
 ```text
-/plugin marketplace add https://github.com/HuaTalk/hiding-skill.git
+/plugin marketplace add https://github.com/monadrome/hiding-skill.git
 ```
 
 Then install the plugin in a separate prompt:
@@ -237,7 +237,7 @@ Version 0.9.1 accepts natural-language requests and keeps the previous flags as 
 Agent Skills:
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 Claude Code:
@@ -262,7 +262,7 @@ Changes to Skill behavior must preserve the same contract across supported agent
 npm test
 ```
 
-Issues and feature requests are tracked in [GitHub Issues](https://github.com/HuaTalk/hiding-skill/issues).
+Issues and feature requests are tracked in [GitHub Issues](https://github.com/monadrome/hiding-skill/issues).
 
 ## License
 

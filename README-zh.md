@@ -1,6 +1,6 @@
 # Hiding
 
-[![CI](https://github.com/HuaTalk/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/HuaTalk/hiding-skill/actions/workflows/test.yml)
+[![CI](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.md)
 
@@ -76,7 +76,7 @@ npx skills-npm setup
 适用于 Codex、Cursor、Windsurf、Gemini CLI、GitHub Copilot、Cline 以及 Agent Skills 生态支持的其他 Agent：
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定。
@@ -86,7 +86,7 @@ Agent 兼容性和安装位置由安装器以及各 Agent 的 Skill 实现决定
 将仓库注册为插件市场：
 
 ```text
-/plugin marketplace add https://github.com/HuaTalk/hiding-skill.git
+/plugin marketplace add https://github.com/monadrome/hiding-skill.git
 ```
 
 然后在另一个提示中安装插件：
@@ -233,7 +233,7 @@ v0.9.1 支持自然语言请求，并将原有 flags 保留为可选兼容写法
 Agent Skills：
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 Claude Code：
@@ -258,7 +258,7 @@ Skill 行为变更必须在支持的不同 Agent 环境中保持同一契约。�
 npm test
 ```
 
-问题和功能建议通过 [GitHub Issues](https://github.com/HuaTalk/hiding-skill/issues) 跟踪。
+问题和功能建议通过 [GitHub Issues](https://github.com/monadrome/hiding-skill/issues) 跟踪。
 
 ## 许可证
 

@@ -7,7 +7,7 @@ Which files in this repo map to which AI agent.
 The canonical skill `skills/hide/SKILL.md` is distributed to **70+ agents** via the open agent skills ecosystem:
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 This installs the `/hide` slash command to all detected agents (Claude Code, Cursor, Windsurf, Cline, Gemini CLI, Copilot, Codex, OpenCode, Roo Code, Aider, Zed, and more).
@@ -27,7 +27,7 @@ All agents not listed above receive the skill via `npx skills`. No platform-spec
 ### Skill install (all agents, recommended)
 
 ```bash
-npx skills add HuaTalk/hiding-skill
+npx skills add monadrome/hiding-skill
 ```
 
 Gives you the `/hide` command on all installed agents.
@@ -35,7 +35,7 @@ Gives you the `/hide` command on all installed agents.
 ### Plugin install (Claude Code native)
 
 ```bash
-/plugin marketplace add https://github.com/HuaTalk/hiding-skill.git
+/plugin marketplace add https://github.com/monadrome/hiding-skill.git
 /plugin install hiding@hiding
 ```
 

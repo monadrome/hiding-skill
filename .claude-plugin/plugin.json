@@ -3,10 +3,10 @@
   "description": "Strategically remove AI leakage, exposed constraints, provenance clues, credentials, and user-specified sensitive content from files without changing executable behavior.",
   "version": "0.9.2",
   "author": {
-    "name": "HuaTalk",
-    "url": "https://github.com/HuaTalk"
+    "name": "monadrome",
+    "url": "https://github.com/monadrome"
   },
-  "repository": "https://github.com/HuaTalk/hiding-skill.git",
+  "repository": "https://github.com/monadrome/hiding-skill.git",
   "keywords": [
     "claude-code",
     "plugin",
