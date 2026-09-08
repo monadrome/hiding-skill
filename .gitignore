@@ -19,3 +19,7 @@ __pycache__/
 
 # Claude Code local settings (machine-specific permission grants)
 .claude/settings.local.json
+
+# Agent planning and scratch state
+.planning/
+todo/

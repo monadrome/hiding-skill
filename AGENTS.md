@@ -86,7 +86,7 @@ Inventories files created or modified through file-editing tools in the current 
 - **Config** (.yml, .yaml, .json, .xml, .toml, .env, .properties, .ini, .cfg): Remove leakage comments. Change credential values only when a format-safe placeholder preserves structure; report other behavior-affecting values for human review.
 - **Other**: Remove any comment or prose matching the leakage categories or user targets.
 
-## Token-efficient execution(only for codex cli)
+## Token-efficient execution (only for codex cli)
 
 - Minimize model/tool round trips. Batch independent inspections, searches,
   and verification commands into as few tool calls as practical.
