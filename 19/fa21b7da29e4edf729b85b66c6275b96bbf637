@@ -1,0 +1,56 @@
+CONTRIBUTING.md
+  s_abd7db19ba9b5d::t_acb9b7f049013c 57,59-61,70,75-85
+package-lock.json
+  ai_agent 2-3,8-9
+README-zh.md
+  s_abd7db19ba9b5d::t_7e4fb36d8b8178 144
+  s_abd7db19ba9b5d::t_214e3e00f5b264 231
+  s_abd7db19ba9b5d::t_8d2e67d99e568e 18,70
+  s_abd7db19ba9b5d::t_ba5aa931dd886c 40
+AGENTS.md
+  h_5595c707bc937d 88-89
+  s_abd7db19ba9b5d::t_d0325c1dfd7976 68
+  s_abd7db19ba9b5d::t_78818f2f6e0a6c 14
+scripts/check-skill-contract.js
+  s_abd7db19ba9b5d::t_c9657496bbf2d6 233
+  s_abd7db19ba9b5d::t_a32db2db93f0d1 167-179
+README.md
+  s_abd7db19ba9b5d::t_55bb3a39bd4b91 148
+  s_abd7db19ba9b5d::t_2958066f63ddcd 44
+  s_abd7db19ba9b5d::t_34fc53177cca6d 22,74
+  s_abd7db19ba9b5d::t_0e0ee659f80bcf 235
+skills/hide/references/automatic-scope.md
+  s_abd7db19ba9b5d::t_2e5fa7c2452185 5-6,9-13,18-20
+skills/hide/SKILL.md
+  s_abd7db19ba9b5d::t_69277ac2e379cc 6
+  s_abd7db19ba9b5d::t_2ea63ebd4396c3 25
+package.json
+  s_abd7db19ba9b5d::t_0f90e523f4fd7c 2
+  s_abd7db19ba9b5d::t_d666ab198daccd 3
+.claude-plugin/plugin.json
+  s_abd7db19ba9b5d::t_9401c5d272c4b7 4
+CHANGELOG.md
+  s_abd7db19ba9b5d::t_2d4cde66bd35da 10-11,16-23
+  s_abd7db19ba9b5d::t_ea2384305da769 12-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.43-trip",
+  "base_commit_sha": "19fa21b7da29e4edf729b85b66c6275b96bbf637",
+  "prompts": {},
+  "humans": {
+    "h_5595c707bc937d": {
+      "author": "linqh <linqh@trip.com>"
+    }
+  },
+  "sessions": {
+    "s_abd7db19ba9b5d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "230ec7cc-836b-43c3-9eee-bb4edc2ed71f",
+        "model": "deepseek-v4.1-flash-expires-on-0910"
+      },
+      "human_author": "linqh <linqh@trip.com>"
+    }
+  }
+}
