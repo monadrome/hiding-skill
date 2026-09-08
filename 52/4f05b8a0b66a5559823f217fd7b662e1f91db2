@@ -1,0 +1,57 @@
+.claude-plugin/plugin.json
+  s_abd7db19ba9b5d::t_75f7aa56161b34 4
+package-lock.json
+  ai_agent 3,8-9
+README.md
+  s_abd7db19ba9b5d::t_34fc53177cca6d 22,74
+  s_abd7db19ba9b5d::t_24187e52f8b72d 235
+  s_abd7db19ba9b5d::t_2958066f63ddcd 44
+  s_abd7db19ba9b5d::t_55bb3a39bd4b91 148
+README-zh.md
+  s_abd7db19ba9b5d::t_ba5aa931dd886c 40
+  s_abd7db19ba9b5d::t_7e4fb36d8b8178 144
+  s_abd7db19ba9b5d::t_8d2e67d99e568e 18,70
+  s_abd7db19ba9b5d::t_aadd409255f397 231
+CONTRIBUTING.md
+  s_abd7db19ba9b5d::t_acb9b7f049013c 57,59-61,70,75-85
+skills/hide/references/automatic-scope.md
+  s_abd7db19ba9b5d::t_2e5fa7c2452185 5-6,9-13,18-20
+package.json
+  s_abd7db19ba9b5d::t_ce78a31510ab59 3
+  s_abd7db19ba9b5d::t_0f90e523f4fd7c 2
+scripts/check-skill-contract.js
+  s_abd7db19ba9b5d::t_a32db2db93f0d1 167-179
+  s_abd7db19ba9b5d::t_c9657496bbf2d6 233
+AGENTS.md
+  s_abd7db19ba9b5d::t_78818f2f6e0a6c 14
+  h_5595c707bc937d 88-89
+  s_abd7db19ba9b5d::t_d0325c1dfd7976 68
+skills/hide/SKILL.md
+  s_abd7db19ba9b5d::t_2ea63ebd4396c3 25
+  s_abd7db19ba9b5d::t_96d56a5ef03e83 6
+CHANGELOG.md
+  s_abd7db19ba9b5d::t_d6b3df07a84207 10
+  s_abd7db19ba9b5d::t_ea2384305da769 12-15
+  s_abd7db19ba9b5d::t_2d4cde66bd35da 11,16-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.43-trip",
+  "base_commit_sha": "524f05b8a0b66a5559823f217fd7b662e1f91db2",
+  "prompts": {},
+  "humans": {
+    "h_5595c707bc937d": {
+      "author": "linqh <linqh@trip.com>"
+    }
+  },
+  "sessions": {
+    "s_abd7db19ba9b5d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "230ec7cc-836b-43c3-9eee-bb4edc2ed71f",
+        "model": "deepseek-v4.1-flash-expires-on-0910"
+      },
+      "human_author": null
+    }
+  }
+}
