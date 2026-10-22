@@ -26,6 +26,26 @@ for (const relativePath of ['package.json', '.claude-plugin/plugin.json']) {
 }
 
 try {
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
+  for (const [label, entry] of [
+    ['package-lock.json', lock],
+    ['package-lock.json packages[""]', lock.packages?.['']],
+  ]) {
+    if (entry?.name !== manifest.name) {
+      fail(`${label}: package name must match package.json (${manifest.name})`);
+    }
+    const value = entry?.version;
+    if (typeof value !== 'string' || !semver.test(value)) {
+      fail(`${label}: version must be pinned X.Y.Z semver, got ${JSON.stringify(value)}`);
+    }
+    versions.push([label, value]);
+  }
+} catch (error) {
+  fail(`package-lock.json: ${error.message}`);
+}
+
+try {
   const relativePath = 'skills/hide/SKILL.md';
   const content = fs.readFileSync(path.join(root, relativePath), 'utf8');
   const frontmatterEnd = content.indexOf('\n---', 3);
@@ -55,4 +75,4 @@ if (shared && process.env.GITHUB_REF_TYPE === 'tag') {
 }
 
 if (failed) process.exit(1);
-console.log(`All ${versions.length} version files pinned at ${shared}.`);
+console.log(`All ${versions.length} version entries pinned at ${shared}.`);

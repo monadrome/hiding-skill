@@ -11,7 +11,7 @@ This repo has no runtime implementation or build. It contains skill definitions,
 | Leakage category logic / skill behavior | `skills/hide/SKILL.md` and its directly linked references |
 | Repository maintenance instructions | `AGENTS.md` (`CLAUDE.md` imports it) |
 | User-facing install/usage docs | `README.md`, `README-zh.md` |
-| Version bump | `.claude-plugin/plugin.json`, `package.json`, `SKILL.md` frontmatter (`metadata.version`) |
+| Version bump | `.claude-plugin/plugin.json`, `package.json`, `package-lock.json` (top-level and root-package entries), `SKILL.md` frontmatter (`metadata.version`) |
 | Static Skill and repository invariants | `scripts/check-skill-contract.js` |
 | Version parsing and release-tag alignment | `scripts/check-versions.js` |
 | CI checks | `.github/workflows/test.yml`, `.github/workflows/publish.yml` |
@@ -39,7 +39,7 @@ Silent execution is the default. Any user-visible output must be required by the
 
 ## Releasing (maintainers)
 
-1. Bump the version in all three files: `.claude-plugin/plugin.json`, `package.json`, `SKILL.md` frontmatter.
+1. Bump the version in `.claude-plugin/plugin.json`, `package.json`, `package-lock.json` (both the top-level and root-package entries), and `SKILL.md` frontmatter. Keep the npm package name `@monadrome/hiding-skill` consistent in both npm manifests.
 2. `npm ci && npm test` must pass.
 3. Move the `Unreleased` CHANGELOG entry to the release date.
 4. Run `npm pack --dry-run` and verify that the package contains every local file linked from the READMEs.
@@ -70,8 +70,10 @@ After the first package exists, configure Trusted Publisher on the npm package
 `@monadrome/hiding-skill` with GitHub owner `monadrome`, repository `hiding-skill`,
 and workflow filename `publish.yml`. Then delete the `NPM_TOKEN` repository
 secret. Subsequent `v*` tag pushes publish through GitHub Actions OIDC and do not
-read an npm token. The workflow's `id-token: write` permission and `npm@latest`
-installation are required for that path.
+read an npm token. The workflow's `id-token: write` permission and pinned npm CLI
+installation support that path. After a GitHub account or repository rename,
+update the npm Trusted Publisher binding to the current owner and repository;
+GitHub redirects do not update that binding automatically.
 
 ### Renaming the npm package
 

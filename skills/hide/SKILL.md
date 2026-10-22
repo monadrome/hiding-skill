@@ -3,7 +3,7 @@ name: hide
 description: Removes AI traces, provenance clues, exposed constraints, credentials, and user-specified content from files. Use when asked to hide source, clean AI traces, remove sensitive references, 隐藏 AI 痕迹、隐藏数据来源、隐藏约束、清理 xxx 痕迹, or perform release hygiene. File cleanup only; not prose humanization, ordinary editing, or conversation cleanup.
 metadata:
   author: monadrome
-  version: "0.10.0"
+  version: "1.0.0"
   category: output-discipline
 ---
 
@@ -83,15 +83,15 @@ After literal selection or automatic scope chooses a file and Step 0 validates i
 
 Before any purge decision, scan every line, key, and value for credentials. Credentials grant access; internal names, non-access-bearing URLs, and mock labels are not credentials. Record findings and the required warning without modifying the file yet.
 
-The warning fires after the outcome is known even if the file is deleted as a purge candidate or left unchanged:
+In Session HITL, show the following outcome-neutral warning once with Tier 0 findings before waiting for selection. Otherwise emit it after the outcome is known. The warning is required even if the file is deleted as a purge candidate or left unchanged:
 
-> **"Security-sensitive content (credentials/keys/tokens) was found {and removed / preview only / but not removed}. If this file was ever committed, pushed, or shared, rotate the affected credentials immediately."**
+> **"Security-sensitive content (credentials/keys/tokens) was found. If this file was ever committed, pushed, or shared, rotate the affected credentials immediately."**
 
 ### Step 2: File-Level Purge Check (HITL)
 
 Ask: after removing transient thought-process traces, AI-facing rationale/guardrails, AI self-reference, and user-target matches, would any section remain useful standalone reference? If no, treat the file as a purge candidate. Durable reader-facing content must not count toward purge signals.
 
-Do not strip a purge candidate. Under preview intent, report it as a would-delete candidate without requesting or acting on deletion confirmation. Otherwise ask whether to delete it; delete only on explicit confirmation, or leave it untouched and stop processing that file. Emit any Step 1 credential warning regardless of this choice.
+Do not strip a purge candidate. Under preview intent, report it as a would-delete candidate without requesting or acting on deletion confirmation. Otherwise ask whether to delete it; delete only on explicit confirmation, or leave it untouched and stop processing that file. Emit any pending Step 1 credential warning regardless of this choice.
 
 ### Step 3: Strip
 

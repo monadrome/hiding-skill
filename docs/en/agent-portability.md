@@ -4,13 +4,13 @@ Which files in this repo map to which AI agent.
 
 ## Skill Distribution (via `npx skills`)
 
-The canonical skill `skills/hide/SKILL.md` is distributed to **70+ agents** via the open agent skills ecosystem:
+The canonical skill `skills/hide/SKILL.md` is distributed through the Agent Skills installer:
 
 ```bash
 npx skills add monadrome/hiding-skill
 ```
 
-This installs the `/hide` slash command to all detected agents (Claude Code, Cursor, Windsurf, Cline, Gemini CLI, Copilot, Codex, OpenCode, Roo Code, Aider, Zed, and more).
+The installer places the Skill in supported agents' directories. Agent compatibility, install location, and slash-command support depend on the installer and each host's Skill implementation.
 
 ## Claude Code Native
 
@@ -20,17 +20,17 @@ This installs the `/hide` slash command to all detected agents (Claude Code, Cur
 
 ## Additional Agents (via npx skills)
 
-All agents not listed above receive the skill via `npx skills`. No platform-specific files are required in this repo — `npx skills` handles path resolution and symlink creation for each agent automatically.
+Other supported agents can receive the Skill via `npx skills`. The installer handles their installation paths; this repository does not provide separate platform-specific Skill definitions.
 
 ## How to use
 
-### Skill install (all agents, recommended)
+### Skill install (supported agents)
 
 ```bash
 npx skills add monadrome/hiding-skill
 ```
 
-Gives you the `/hide` command on all installed agents.
+Makes the Skill available to supported agents selected during installation. Invocation behavior depends on the host.
 
 ### Plugin install (Claude Code native)
 

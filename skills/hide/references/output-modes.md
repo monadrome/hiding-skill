@@ -10,4 +10,4 @@ Read this file for preview intent (including `dry-run`) or a non-default output 
 
 Never overwrite a `newfile` or backup target. Use the next numbered name (`-cleaned-2`, `.bak-2`, then increment) and report the collision.
 
-Preview intent never writes. For explicitly selected files, show built-in categories and user-target matches with line context. For `worktree`, first show its resolved base, eligible files, excluded control state, and low-confidence files conservatively excluded from scanning. For current-session selection, show the normal H1-H3 findings, including user-target matches. Redact secret values. Preview output is an explicit silence exception.
+Preview intent never writes. For explicitly selected files, show built-in categories and user-target matches with line context. For `worktree`, first show its resolved base, eligible files, excluded control state, and low-confidence files conservatively excluded from scanning. For current-session selection, show the H1-H3 preview findings, including user-target matches, without execution choices. Redact secret values. Preview output is an explicit silence exception.

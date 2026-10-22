@@ -288,8 +288,11 @@ const publicContractCorpus = [
   read(path.join(root, '.claude-plugin', 'plugin.json')),
   read(path.join(root, '.claude-plugin', 'marketplace.json')),
 ].join('\n');
-if (/\/hiding(?![-:A-Za-z0-9_])|skills\/hiding(?:\/|$)/m.test(publicContractCorpus)) {
-  fail('Legacy /hiding invocation or skills/hiding path found in current project files.');
+if (/\/hiding(?![-:A-Za-z0-9_])/m.test(publicContractCorpus)) {
+  fail('Bare /hiding is not a supported invocation; use /hide or /hiding:hide instead.');
+}
+if (/skills\/hiding(?:\/|$)/m.test(publicContractCorpus)) {
+  fail('Removed skills/hiding path found in current project files.');
 }
 const strictGrammarPatterns = [
   ['targets before flags', /targets?\s+must\s+(?:precede\b|(?:appear|be placed)\s+before\b)/i, 'Targets must precede the first flag.'],
@@ -312,6 +315,30 @@ for (const relativePath of ['.claude-plugin/plugin.json', '.claude-plugin/market
   }
 }
 
+try {
+  const pluginManifest = JSON.parse(read(path.join(root, '.claude-plugin/plugin.json')));
+  const marketplace = JSON.parse(read(path.join(root, '.claude-plugin/marketplace.json')));
+  const localPlugin = marketplace.plugins?.find(entry => entry.source === './');
+  if (typeof pluginManifest.name !== 'string' || !pluginManifest.name
+      || localPlugin?.name !== pluginManifest.name) {
+    fail('The root marketplace entry and plugin manifest must use the same plugin name.');
+  } else {
+    const installCommand = `/plugin install ${pluginManifest.name}@${marketplace.name}`;
+    const updateCommand = `/plugin update ${pluginManifest.name}@${marketplace.name}`;
+    const skillCommand = `/${pluginManifest.name}:hide`;
+    for (const relativePath of ['README.md', 'README-zh.md', 'docs/en/agent-portability.md', 'docs/zh/promotion-article.md']) {
+      const documentation = read(path.join(root, relativePath));
+      const requiredCommands = [installCommand, skillCommand];
+      if (relativePath !== 'docs/en/agent-portability.md') requiredCommands.push(updateCommand);
+      for (const command of requiredCommands) {
+        if (!documentation.includes(command)) fail(`${relativePath} must document ${command}.`);
+      }
+    }
+  }
+} catch (error) {
+  fail(`Plugin identity validation failed: ${error.message}`);
+}
+
 for (const relativePath of ['.github/workflows/test.yml', '.github/workflows/publish.yml']) {
   try {
     yaml.load(read(path.join(root, relativePath)));
@@ -322,6 +349,9 @@ for (const relativePath of ['.github/workflows/test.yml', '.github/workflows/pub
 
 try {
   const packageManifest = JSON.parse(read(path.join(root, 'package.json')));
+  if (packageManifest.name !== '@monadrome/hiding-skill') {
+    fail('package.json must publish as @monadrome/hiding-skill.');
+  }
   if ('main' in packageManifest) fail('package.json must not declare a JavaScript entry point for this data-only package.');
   if (packageManifest.scripts?.prepublishOnly !== 'npm test') {
     fail('package.json must run repository checks before manual publication.');

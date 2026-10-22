@@ -7,18 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-22
+
 ### Changed
 
+- Promoted the file-cleanup Skill to its first stable release as `@monadrome/hiding-skill`, maintained at `monadrome/hiding-skill`. Existing `@huatalk/hiding-skill` installations must switch to the new npm package; the old package remains deprecated.
 - Removed duplicated cleanup behavior from repository agent instructions, kept Claude guidance as an import of `AGENTS.md`, and routed only cleanup follow-up questions to the reporting reference.
 - Consolidated common user-visible output rules in the Skill entry point and recorded full-path source-byte comparisons instead of entry-file-only savings.
 - Documented `targets`, `files`, `dry-run`, `mode`, and `use-subagent` as option fields that can mix with natural language, without command-line notation or compatibility history in runtime instructions.
 - Refined bilingual discovery triggers and exclusions, consolidated repeated instructions, and collected silent-output, credential-redaction, and false-positive pitfalls in a Gotchas section.
 - Replaced the fixed description hash with scope and boundary checks; added guards for supported fields and current-behavior documentation.
+- Included the npm lockfile's package name and both root version entries in release consistency checks.
+
+### Fixed
+
+- Updated the static-check dependency `js-yaml` from 4.3.0 to 4.3.2 to address the reported CPU-exhaustion vulnerabilities (GHSA-5p4m-2wfm-xmqj and GHSA-2883-xcg3-v3hh).
+- Restored the `hiding` plugin name to match the marketplace and documented `/hiding:hide` command; added static checks for plugin identity and installation documentation.
+- Made Session previews stop after presenting findings without execution choices, and moved outcome-neutral credential rotation warnings before cleanup selection so declining cleanup cannot suppress them or leave a stale removal status.
 
 ### Documentation
 
 - Synchronized option fields across the reference card and usage docs, and added representative evaluation scenarios and official OpenAI and Anthropic authoring references.
-- Added a Chinese promotional article covering cleanup scenarios, installation, and current natural-language and compatibility commands.
+- Added a Chinese promotional article covering cleanup scenarios, installation, and natural-language requests.
+- Aligned platform-native guidance with protected code, credential handling, durable rationale, and TODO/FIXME/HACK preservation; qualified agent compatibility claims to match installer and host support.
+- Marked early user-story analysis as historical, corrected obsolete purge thresholds and silence exceptions in explanatory documentation, and qualified unmeasured cleanup and behavior-preservation claims.
 
 ## [0.10.0] - 2026-09-08
 

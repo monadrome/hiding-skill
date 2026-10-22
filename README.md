@@ -104,7 +104,7 @@ Restart Claude Code after installation. The native plugin command is `/hiding:hi
 ## The Basic Workflow
 
 1. **Select outputs** - Use current-session files by default, explicit paths for precise control, or the Git worktree for branch-wide review.
-2. **Preview** - Ask to preview or inspect without changing files to see scope, findings, and conservative exclusions.
+2. **Preview** - Ask to preview or inspect without changing files to see scope, findings, and conservative exclusions. Previews end without execution choices.
 3. **Classify** - Credentials are handled first, followed by file-level purge candidates, inline leakage, and user-specified targets.
 4. **Confirm** - Session review is human-in-the-loop. Whole-file deletion and symlink traversal always require explicit confirmation.
 5. **Clean** - Remove the smallest coherent comment or prose unit. Executable code, string literals, and behavior-affecting values are not silently changed.
@@ -179,7 +179,7 @@ Existing output targets are never overwritten. Numbered alternatives such as `-c
 
 Credentials are scanned before any style cleanup or purge decision.
 
-- A discovered credential always triggers a rotation warning, including during preview.
+- A discovered credential always triggers a rotation warning, including during preview or when cleanup is declined. Session review shows the warning before asking for cleanup choices.
 - Secret values are redacted from reports.
 - Credentials in executable code are not silently edited.
 - Configuration credentials are replaced only when a format-safe placeholder preserves structure; otherwise they remain unchanged and are reported for human review.
@@ -232,7 +232,20 @@ For important files, start by asking for a preview, inspect credential and confi
 
 ## Updating
 
-Use `@monadrome/hiding-skill` for npm installs. See the [changelog](CHANGELOG.md) for version-specific changes and migration details.
+For v1.0.0, use the npm package `@monadrome/hiding-skill` and GitHub repository `monadrome/hiding-skill`. The old `@huatalk/hiding-skill` package is deprecated; npm package scopes do not change automatically when a GitHub account is renamed. See the [changelog](CHANGELOG.md) for release details.
+
+If your project still depends on the old package, remove it first:
+
+```bash
+npm uninstall @huatalk/hiding-skill
+```
+
+Install or update the current package and refresh the installed Skill:
+
+```bash
+npm install -D @monadrome/hiding-skill@latest
+npx skills-npm setup
+```
 
 Agent Skills:
 

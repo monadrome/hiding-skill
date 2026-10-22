@@ -30,7 +30,7 @@ const UserProfile = memo(({ user }) => {
 这三行注释，暴露了三件事：
 
 1. **你的团队规范文件叫 AGENTS.md**——读者没有这份文件，也不该知道它存在
-2. **这个决策经历了一个推导过程**——调研→排除→选择，这是 AI 的思考痕迹
+2. **文件混入了本次会话的临时尝试记录**——应区分临时过程与值得保留的技术理由、证据和取舍
 3. **写代码的不是人**——"As an AI" 直接自曝
 
 更危险的是，配置文件里可能还残留着 API 密钥、内部服务连接字符串、或者没公开的项目代号。
@@ -53,11 +53,11 @@ npx skills-npm setup
 安装后重启 Agent，然后在对话中直接使用：
 
 ```text
-/hide --dry-run   # 先预览当前会话中会清理什么
+/hide 预览当前会话中修改过的文件
 /hide             # 确认无误，执行清理
 ```
 
-也支持 `npx skills add`（覆盖 Codex、Cursor、Windsurf、Gemini CLI、GitHub Copilot、Cline 等 70+ Agent）和 Claude Code 原生插件两种方式。后面细说。
+也支持 `npx skills add` 和 Claude Code 原生插件两种方式。具体 Agent 兼容性、安装位置和命令支持取决于安装器与宿主实现。后面细说。
 
 ---
 
@@ -116,51 +116,56 @@ const UserProfile = memo(({ user }) => {
 
 最常用的姿势。写完代码，先预览再清理：
 
+```text
+/hide 预览当前会话中修改过的文件
+/hide 清理当前会话中修改过的文件
+```
+
+完成审查和清理后，再提交：
+
 ```bash
-/hide --dry-run   # 先看会删什么
-/hide             # 确认无误，执行清理
 git commit -m "feat: add user service"
 ```
 
-`--dry-run` 让你先预览所有发现——包括凭据、泄露痕迹和用户指定的内容目标——确认后再动手。不盲操作，不后悔。
+预览请求会展示凭据、泄露痕迹和用户指定的内容目标，但不修改文件，也不提供执行选项。检查发现后，另行请求清理。
 
 ### 场景二：交付给客户
 
 你是自由职业者，客户不知道（也不需要知道）你用 AI 辅助开发。交付前：
 
-```bash
-/hide --files README.md config.yml --dry-run
-/hide --files README.md config.yml --mode backup
+```text
+/hide 预览 README.md 和 config.yml
+/hide 清理 README.md 和 config.yml，先备份原文件
 ```
 
 `backup` 模式会把原文件重命名为 `.bak`，清理后的内容写到原路径。交付的是干净版本，原版留着备查。
 
 或者用 `newfile` 模式，生成独立的清理副本：
 
-```bash
-/hide --files report.md --mode newfile  # 生成 report-cleaned.md，原文件不动
+```text
+/hide 清理 report.md，写入新副本并保留原文件
 ```
 
 ### 场景三：审查整个分支
 
 要发布新版本了，想确保整个分支没有泄露痕迹：
 
-```bash
-/hide --files worktree --dry-run
+```text
+/hide 预览这个 Git 工作区中的变更
 ```
 
-`worktree` 会自动找出当前分支相对于主分支的所有变更文件（包括提交、暂存、未暂存和未跟踪文件），扫描后给你一份完整的预览报告。确认后执行：
+`worktree` 基于本地解析出的主分支 merge base 收集分支提交、暂存、未暂存和未被忽略的未跟踪变更，再排除 Agent 支持文件与低置信度候选，仅扫描符合范围的产物。检查预览后另行请求清理：
 
-```bash
-/hide --files worktree
+```text
+/hide 清理这个 Git 工作区中符合范围的变更文件
 ```
 
 ### 场景四：隐藏内部信息
 
 项目里到处写着还没公开的内部代号或数据来源：
 
-```bash
-/hide "Project Nebula" "mock data" --files docs/design.md --dry-run
+```text
+/hide 预览 docs/design.md，并隐藏 Project Nebula 和 mock data
 ```
 
 示例中的 Project Nebula 和 mock data 是**语义目标**——告诉 `/hide` 额外查找包含这些概念的内容。它会按语义匹配（不是关键词 grep），在预览中标记相关段落；执行清理请求时才修改文件。目标可以用自然语言描述，无需引号或固定参数顺序。
@@ -202,9 +207,9 @@ git commit -m "feat: add user service"
 | 思考过程痕迹清理 | ✅ | 部分 |
 | 全五类覆盖 | ✅ | **0/10** |
 
-**未共享规则引用清理**是 `/hide` 最深的护城河——所有已核实的竞品在这个维度上都是空白。**凭据检测 + 强制轮换警告**的组合也是独一份——其他工具要么只检测不警告，要么根本不碰凭据。
+在本仓库的竞品对比中，**未共享规则引用清理**与**凭据检测 + 强制轮换警告**是 `/hide` 着重覆盖的组合。这个比较受样本和调研时间限制，不代表对所有工具的完整评估。
 
-品类正在升温：undercover（2026-04）、papertowel（2026-04）、aislop v0.13.1（2026-06）都是近期产物。需求已被验证，而 `/hide` 是唯一一个覆盖完整五类内容泄露的工具。
+对比资料记录了 undercover（2026-04）、papertowel（2026-04）、aislop v0.13.1（2026-06）等项目。`/hide` 将五类内容泄露纳入指令范围；实际检测效果仍依赖模型判断，仓库尚未发布运行准确率基准。
 
 ---
 
@@ -222,15 +227,15 @@ git commit -m "feat: add user service"
 
 因为如果工具告诉你它做了什么，那就暴露了"有东西被清理过"这个事实——这本身就是一个新的信息泄露。
 
-`/hide` 的目标是：**运行后，无人能看出它运行过。**
+`/hide` 不在产物中添加清理标记，也不改写 Git 历史、工具记录或范围外的副本。
 
-唯一打破静默的情况：**发现凭据时，强制提示你轮换凭证。** 如果在 `--dry-run` 中只预览到凭据而没有移除，同样会触发警告。安全底线，高于静默原则。
+预览、会话发现与选择、错误和必要确认会显式输出。**只要发现凭据就会提示轮换，预览或拒绝清理时也一样。** 会话审查会先告警，再询问清理选择。
 
 ### 3. 只删不改
 
 不是"改写得更像人写的"，而是"删掉不像人写的内容"。代码逻辑、字符串字面量、影响运行时行为的配置值，**绝不静默修改**。
 
-这个约束让 `/hide` 可以做一件 humanizer 做不到的事：**事后用真实 parser 验证文件结构没有被破坏。** JSON 用 `jq` 校验，YAML 用 PyYAML 校验，XML 用 `xmllint` 校验。验证失败则丢弃候选版本，原文件不动。删错了，一眼可见。改错了，无声无息。
+清理后会验证候选版本：JSON、YAML、XML 在解析器可用时使用 `jq` 或 Python `json`、PyYAML、`xmllint`；解析器缺失时允许目视回退。结构校验失败则保留原文件，但校验通过不能证明执行行为不变；重要文件仍需项目自身的测试。
 
 ### 4. 渐进式加载
 
@@ -247,7 +252,7 @@ npm install -D @monadrome/hiding-skill
 npx skills-npm setup
 ```
 
-**② Agent Skills（Codex、Cursor、Windsurf、Gemini CLI、GitHub Copilot、Cline 等 70+ Agent）：**
+**② Agent Skills（适用于安装器与宿主支持的 Agent）：**
 
 ```bash
 npx skills add monadrome/hiding-skill
@@ -276,29 +281,29 @@ npx skills add monadrome/hiding-skill         # Agent Skills
 /hide 预览 report.md，去掉数据来源和内部审核信息
 ```
 
-`/hide` 支持自然语言请求。以下 flags 是可选的兼容写法，可与自然语言混用：
+`/hide` 按语义理解自然语言请求，以下字段用于描述意图，不要求固定语法：
 
 | 参数 | 说明 | 默认值 |
 |------|------|--------|
-| `<要隐藏的内容>` | 用自然语言描述语义目标，无需引号或固定位置 | 无 |
-| `--files` | 文件路径 / `session`（当前会话）/ `worktree`（Git 工作区） | `session` |
-| `--mode` | `inplace`（原地修改）/ `newfile`（生成 `-cleaned` 副本）/ `backup`（备份后覆盖） | `inplace` |
-| `--dry-run` | 预览所有发现，不修改任何文件 | 关闭 |
-| `--use-subagent` | 用新鲜上下文子代理识别候选泄露位置，主代理仍控制所有决策 | 关闭 |
+| `targets` | 用自然语言描述额外语义目标，无需引号或固定位置 | 仅内置类别 |
+| `files` | 文件路径 / `session`（当前会话）/ `worktree`（Git 工作区） | `session` |
+| `mode` | `inplace`（原地修改）/ `newfile`（生成 `-cleaned` 副本）/ `backup`（备份后覆盖） | `inplace` |
+| `dry-run` | 预览所有发现，不修改任何文件 | 关闭 |
+| `use-subagent` | 用新鲜上下文子代理识别候选泄露位置，主代理仍控制所有决策 | 关闭 |
 
 常用组合：
 
 ```text
-/hide --dry-run                                    # 预览当前会话
-/hide --files src/main.py config.yml --mode backup  # 清理指定文件
-/hide "Project Nebula" --files worktree --dry-run   # 分支扫描 + 隐藏代号
+/hide 预览当前会话中修改过的文件
+/hide 清理 src/main.py 和 config.yml，先备份原文件
+/hide 预览这个 Git 工作区中的变更，并隐藏 Project Nebula
 ```
 
 ---
 
 ## 开源 & 社区
 
-`/hide` 是 MIT 协议开源项目，托管在 [GitHub](https://github.com/monadrome/hiding-skill)。当前版本 **v0.10.0**，npm 包名为 `@monadrome/hiding-skill`，CI 自动验证版本一致性、Skill 契约锚点和引用完整性。
+`/hide` 是 MIT 协议开源项目，托管在 [GitHub](https://github.com/monadrome/hiding-skill)。当前版本 **v1.0.0**，npm 包名为 `@monadrome/hiding-skill`，CI 自动验证版本一致性、Skill 契约锚点和引用完整性。
 
 - 📦 [npm 包](https://www.npmjs.com/package/@monadrome/hiding-skill)
 - 📖 [项目主页 & 英文文档](https://github.com/monadrome/hiding-skill)

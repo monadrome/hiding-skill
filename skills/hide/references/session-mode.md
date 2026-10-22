@@ -27,8 +27,12 @@ Scan only eligible inventory files using the loaded leakage categories and any u
 
 For zero findings, including an empty inventory, say **"No AI leakage found in files created or modified in the current session."** If user targets were supplied, include **"or user-specified content"** in that message.
 
-Otherwise present Tier 0 first, then per-file delete/clean choices, Tier 3 concerns, `Hide everything found`, and `Nothing`. Use the runtime input mechanism or plain text and wait for explicit selection. Selecting Tier 0 also triggers the rotation warning.
+Otherwise present Tier 0 first. Whenever credentials were found, include the outcome-neutral Step 1 rotation warning here, regardless of any later selection. It makes no claim about whether credentials have been removed and is not repeated in H4.
+
+Under preview intent, show per-file would-delete/would-clean findings and Tier 3 concerns, then stop. Do not offer execution choices or request cleanup or deletion confirmation.
+
+Without preview intent, present per-file delete/clean choices, Tier 3 concerns, `Hide everything found`, and `Nothing`. Use the runtime input mechanism or plain text and wait for explicit selection before H4.
 
 ## Step H4: Execute User Choices
 
-Delete only after explicit confirmation; deletion ignores the requested output mode. Clean selected files with Steps 0-4 and the chosen output mode. Stay silent afterward except for required warnings.
+Preview requests never reach H4. If the user selects `Nothing`, leave every file unchanged and stop; the credential warning has already been shown when applicable. Otherwise delete only after explicit confirmation; deletion ignores the requested output mode. Clean selected files with Steps 0-4 and the chosen output mode. Stay silent afterward except for required warnings.

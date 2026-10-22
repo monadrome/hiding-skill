@@ -1,6 +1,6 @@
 {
   "name": "@monadrome/hiding-skill",
-  "version": "0.10.0",
+  "version": "1.0.0",
   "description": "Strategic content cleanup for files that should reveal less about their origin, process, AI participation, constraints, or sensitive context.",
   "keywords": [
     "claude-code",
@@ -50,6 +50,6 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "js-yaml": "4.3.0"
+    "js-yaml": "4.3.2"
   }
 }

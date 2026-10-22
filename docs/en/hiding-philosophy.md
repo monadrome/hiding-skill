@@ -35,6 +35,8 @@ This is the AI equivalent of Fermat writing a 100-page proof in the margin. It's
 
 `/hide` gives your code the Fermat treatment. It strips away the scaffolding — the "I think," the "let me consider," the "following the convention," the step-by-step reasoning — and leaves only the result.
 
+Durable requirements, architecture decisions, alternatives, evidence, and technical rationale remain useful documentation. The cleanup targets transient session traces and private instruction references, not every explanation of why a result was chosen.
+
 The result looks like this:
 
 ```java
@@ -85,15 +87,15 @@ Both dishes are the same. The second one tastes better.
 
 Here's the truly Fermat-esque part of `/hide`: after it runs, **you can't tell it ran**. There's no marker. No annotation. No `// cleaned by /hide`. No "5 instances of leakage removed." Nothing.
 
-The tool itself disappears. Like Fermat's proof, the operation leaves no trace.
+The selected file gets no cleanup marker. Previews, Session findings and choices, credential warnings, errors, and required confirmations remain visible. Git history, tool records, and copies outside the selected scope are not rewritten.
 
 This is not a bug — it's the entire point. The illusion is that the file was always that clean. And if the illusion is perfect, it's not an illusion at all — it's just the file.
 
-## A Note on Credentials (The One Thing That Breaks the Silence)
+## A Note on Credentials
 
 Fermat had the luxury of pure mathematics — his hidden proofs couldn't hurt anyone. But AI-generated files sometimes contain actual credentials: API keys, tokens, passwords. These are dangerous.
 
-`/hide` has exactly ONE mandatory exception to its silence: if it finds and removes a credential, it warns you. "If this file was ever committed or shared, rotate the affected credentials immediately."
+Whenever `/hide` finds a credential, it warns you and recommends rotation, including during preview or when cleanup is declined. Session review shows the warning before asking for choices. Removing a local value does not revoke it or erase earlier exposure.
 
 This is the difference between Fermat and you: Fermat's unproven theorem was a gift to mathematics. Your accidentally-committed API key is a gift to cryptocurrency miners. `/hide` will clean the file, but it won't pretend the key was never there. Because unlike Fermat, you actually have to live with the consequences.
 
