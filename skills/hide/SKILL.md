@@ -22,19 +22,22 @@ metadata:
 
 ## Gotchas
 
-- **Silent output**: Stay silent unless a documented exception applies; with no findings outside Session HITL or preview intent, do nothing and say nothing. On silent paths, emit tool calls only from the start and do not narrate analysis. Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path.
+- **Silent output**: With no findings outside Session HITL or preview intent, do nothing and say nothing. On silent paths, emit tool calls only from the start and do not narrate analysis. Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path. The last required tool result is terminal: send no assistant text afterward.
 - **Credential output**: Identify credentials only by a fixed `[REDACTED]` label and file/line/key location. Never emit or describe a value substring, recognizable prefix or suffix, format, pattern, provider-specific scheme or token type, original length, or shape.
 - **False positives**: Preserve durable requirements, decisions, trade-offs, and research conclusions. TODO/FIXME/HACK and first-person prose are not leakage by themselves; judge audience and purpose using the leakage categories.
 
+## Reporting
+
+Only the following outputs and the routed cleanup follow-up answer are allowed:
+
+- Session findings and choices, zero-findings or unavailable-inventory notices; purge confirmation; previews.
+- Credential rotation warnings; input errors, structural-validation failures, and concurrent-modification aborts.
+- Numbered collision filenames, sub-agent fallback notices, and protected user-target matches requiring review.
+- Worktree resolution errors, empty selections, preview base/file reports, and scope questions required to complete an explicit request.
+
 ## Intent Resolution
 
-Treat the full invocation text after `/hide` as a natural-language request. Infer semantic targets, literal files and/or automatic `session` or `worktree` scope, preview versus write intent, output mode, and fresh-context review.
-
-```text
-/hide preview the files changed in this session
-/hide remove data-source references from report.md and write a cleaned copy
-/hide review the current worktree with a fresh-context sub-agent without changing files
-```
+Treat the full invocation text after `/hide` as a natural-language request. Infer the option fields below by meaning, not fixed syntax.
 
 ### Options
 
@@ -64,7 +67,7 @@ Read only the references whose condition matches. For automatic selectors, load 
 | One or more semantic targets | [User-specified targets](references/user-targets.md) |
 | Preview intent or a non-default output mode | [Output modes](references/output-modes.md) |
 | Fresh-context sub-agent intent | [Sub-agent review](references/subagent-review.md) |
-| Before any user-visible output | [Reporting contract](references/reporting.md) |
+| Asked what was removed or whether cleanup ran | [Cleanup follow-up](references/reporting.md) |
 
 ## Execution Order
 
@@ -103,8 +106,6 @@ Validate a temporary candidate before changing the original. Use installed parse
 After stripping, re-read the candidate once. On failure, discard it and leave the original untouched. Report: "Structural issue detected after cleaning — file left unchanged. Human review needed." A successful visual fallback is silent.
 
 The default `inplace` mode replaces the original only after successful validation. Before any write, preserve the file's original line ending style (LF vs CRLF) and compare mtime with the value observed when reading; if it changed, warn and abort. Replace atomically where supported.
-
-On a silent path, the last required tool result is terminal: send no assistant text and end the turn immediately. Do not acknowledge completion or describe removed content after that tool result, even in one sentence.
 
 ## Strip Strategy by File Type
 

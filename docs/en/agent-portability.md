@@ -41,6 +41,6 @@ Gives you the `/hide` command on all installed agents.
 
 Gives you the namespaced `/hiding:hide` command with session-aware HITL mode. Claude Code also accepts `/hide` when no other command uses that name.
 
-### Reference card
+### Repository maintenance
 
-`AGENTS.md` provides a quick-reference of the five leakage categories. It is not a runtime rule file — it exists for humans to understand what `/hide` strips.
+`AGENTS.md` contains repository maintenance instructions; `CLAUDE.md` imports the same guidance. Hosts may load these files as project instructions when working in this repository. Cleanup workflows live in `skills/hide/SKILL.md` and its conditional references and are loaded on invocation, not through project instructions. Installing the Skill in another project does not by itself load this repository's `AGENTS.md`.

@@ -189,17 +189,19 @@ for (const [label, pattern] of agentSupportContracts) {
 
 const reporting = readRegularFile(path.join(referencesDir, 'reporting.md'));
 const requiredReportingContracts = [
-  ['silent tool execution and completion', /use tools without narration and end the turn immediately after successful verification with no assistant text block/],
-  ['silent acknowledgments forbidden', /Never say `Done`, `Cleaned`, `Complete`, `Success`, or any equivalent acknowledgment/],
-  ['HITL, purge, and preview output', /Session HITL findings and choices, whole-file purge confirmation, and previews \(including `dry-run`\)/],
-  ['credential and Session status output', /Credential rotation warnings, plus Session zero-findings and unavailable-inventory notices/],
-  ['input, structure, and concurrency errors', /Input errors, structural-validation failures, and concurrent-modification aborts/],
-  ['collision, sub-agent, and protected-target output', /Numbered collision filenames, sub-agent fallback notices, and user-target matches in executable content/],
-  ['worktree and blocking-scope output', /Worktree resolution errors, empty selections, and preview base\/file reports; blocking scope questions/],
+  ['explicit reporting whitelist and follow-up exception', /Only the following outputs and the routed cleanup follow-up answer are allowed/],
+  ['HITL, status, purge, and preview output', /Session findings and choices, zero-findings or unavailable-inventory notices; purge confirmation; previews/],
+  ['credential, input, structure, and concurrency output', /Credential rotation warnings; input errors, structural-validation failures, and concurrent-modification aborts/],
+  ['collision, sub-agent, and protected-target output', /Numbered collision filenames, sub-agent fallback notices, and protected user-target matches requiring review/],
+  ['worktree and blocking-scope output', /Worktree resolution errors, empty selections, preview base\/file reports, and scope questions required to complete an explicit request/],
 ];
 
 for (const [label, pattern] of requiredReportingContracts) {
-  if (!pattern.test(reporting)) fail(`Reporting contract is missing: ${label}.`);
+  if (!pattern.test(skill)) fail(`Always-loaded reporting contract is missing: ${label}.`);
+}
+if (!/Read this file only when asked what was removed or whether cleanup ran/.test(reporting)
+    || !/Reply only: "X leakage categories were addressed\." Do not itemize or celebrate\./.test(reporting)) {
+  fail('Conditional cleanup follow-up contract is missing.');
 }
 
 const requiredEntryRoutes = [
@@ -210,7 +212,7 @@ const requiredEntryRoutes = [
   ['semantic-target rules', /One or more semantic targets[^\n]+\(references\/user-targets\.md\)/],
   ['optional output behavior', /Preview intent or a non-default output mode[^\n]+\(references\/output-modes\.md\)/],
   ['sub-agent workflow', /Fresh-context sub-agent intent[^\n]+\(references\/subagent-review\.md\)/],
-  ['reporting before visible output', /Before any user-visible output[^\n]+\(references\/reporting\.md\)/],
+  ['conditional cleanup follow-up', /Asked what was removed or whether cleanup ran[^\n]+\(references\/reporting\.md\)/],
 ];
 
 for (const [label, pattern] of requiredEntryRoutes) {
@@ -231,7 +233,7 @@ const requiredInlineContracts = [
   ['explicit path exclusion', /A path in an exclusion[^\n]+must never be read or written/],
   ['combined scope support', /Combine and de-duplicate requested scope sources after applying exclusions/],
   ['clarify only material ambiguity', /Ask a concise clarification only when a path's role or another ambiguity would materially change which files are read or written/],
-  ['silent no-findings behavior', /with no findings outside Session HITL or preview intent, do nothing and say nothing/],
+  ['silent no-findings behavior', /With no findings outside Session HITL or preview intent, do nothing and say nothing/],
   ['silent tool-only execution', /On silent paths, emit tool calls only from the start and do not narrate analysis/],
   ['no silent completion text block', /Silent termination means emitting no assistant text block at all/],
   ['no one-word completion acknowledgment', /Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path/],
@@ -242,8 +244,7 @@ const requiredInlineContracts = [
   ['concurrent modification before writes', /compare mtime with the value observed when reading; if it changed, warn and abort/],
   ['agent support files excluded by default', /Automatically scan deliverables, not agent support files/],
   ['whole-block removal', /Remove a multi-line leakage block as a whole/],
-  ['silent terminal behavior', /the last required tool result is terminal: send no assistant text/],
-  ['no post-tool cleanup summary', /Do not acknowledge completion or describe removed content after that tool result/],
+  ['silent terminal behavior', /The last required tool result is terminal: send no assistant text afterward/],
 ];
 
 for (const [label, pattern] of requiredInlineContracts) {

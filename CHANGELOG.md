@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Removed duplicated cleanup behavior from repository agent instructions, kept Claude guidance as an import of `AGENTS.md`, and routed only cleanup follow-up questions to the reporting reference.
+- Consolidated common user-visible output rules in the Skill entry point and recorded full-path source-byte comparisons instead of entry-file-only savings.
 - Documented `targets`, `files`, `dry-run`, `mode`, and `use-subagent` as option fields that can mix with natural language, without command-line notation or compatibility history in runtime instructions.
 - Refined bilingual discovery triggers and exclusions, consolidated repeated instructions, and collected silent-output, credential-redaction, and false-positive pitfalls in a Gotchas section.
 - Replaced the fixed description hash with scope and boundary checks; added guards for supported fields and current-behavior documentation.

@@ -86,7 +86,22 @@ These are behavioral evaluation cases, not claims of measured accuracy. Run them
 
 The progressive-loading pass beginning at `b305974` reduced `skills/hide/SKILL.md` from 243 lines, 2,894 words, and 20,514 bytes to 120 lines, 1,283 words, and 9,256 bytes. That is a reduction of 50.6% by lines, 55.7% by words, and 54.9% by bytes while preserving the discovery description and behavior contract.
 
-Seven conditional workflows moved into directly routed references. DeepSeek V4 Pro evaluations then exposed two consequential gaps: recognizable credential-pattern disclosure and assistant narration after a silent cleanup. Only those observed failures produced new always-loaded harness rules.
+That entry-file comparison is not a per-invocation loading measurement. This optimization's snapshot has a 9,432-byte `SKILL.md` and eight references totaling 15,064 bytes. Representative static path totals, assuming valid, nonempty selections and counting the entry and only the references required by the documented routes, are:
+
+| Invocation | Before | After | Change | References before -> after |
+|------------|--------|-------|--------|----------------------------|
+| Explicit file, silent default cleanup | 12,161 bytes | 12,232 bytes | +71 bytes (+0.6%) | 1 -> 1 |
+| Default Session cleanup and findings | 18,654 bytes | 17,581 bytes | -1,073 bytes (-5.8%) | 4 -> 3 |
+| Explicit-file preview with a semantic target | 15,482 bytes | 14,409 bytes | -1,073 bytes (-6.9%) | 4 -> 3 |
+| Worktree preview | 19,228 bytes | 18,155 bytes | -1,073 bytes (-5.6%) | 5 -> 4 |
+
+The comparison uses UTF-8 source bytes, not tokens. "Before" is commit `03b22cd`; "after" is the instruction layout in this change. Both totals include the full `SKILL.md`, including frontmatter, and required references; target files, tool output, and conversation are excluded. The simple explicit-file path does not load the reporting reference and therefore gets no saving; its 71-byte increase is the net entry-file change. Common user-visible output rules now live in the entry point, so Session and preview paths no longer load the former reporting contract. Only the low-frequency cleanup follow-up answer remains conditional.
+
+Every listed path reads `leakage-categories.md`. Session adds `automatic-scope.md` and `session-mode.md`; explicit-file preview with a target adds `user-targets.md` and `output-modes.md`; worktree preview adds `automatic-scope.md`, `worktree-mode.md`, and `output-modes.md`. Before this change, each path except silent explicit-file cleanup also reads `reporting.md`. These sets and `wc -c` or Git blob byte lengths reproduce the table. One fewer reference file does not necessarily mean one fewer tool round trip: reads can be batched, and automatic scope still precedes scan-only rules.
+
+Repository instructions are a separate cost. `AGENTS.md` fell from 11,593 to 1,849 bytes (-84.1%); `CLAUDE.md` fell from 7,314 to 24 bytes and imports `AGENTS.md`. This reduces repeated product instructions for work in this repository, where agent hosts load those files. Those bytes are not part of a Skill invocation in another project that does not load this repository's instructions.
+
+These are static source-size comparisons, not token, latency, or context-window measurements. Static checks verify the routes and required instruction anchors; they do not observe which references a host actually loads or count tool calls. The repository does not include runtime traces or published accuracy benchmarks, so the actual loading, round-trip, and behavior effects require isolated runs in each target host. The earlier progressive-loading report described DeepSeek V4 Pro failures involving credential-pattern disclosure and post-cleanup narration. Its execution traces are not included and cannot establish loading or latency effects for this revision.
 
 ## Change Checklist
 
