@@ -51,7 +51,7 @@ For example:
 
 ```typescript
 // Before
-// Per CLAUDE.md, here's the UserProfile component I created.
+// Per AGENTS.md, here's the UserProfile component I created.
 // I think memoizing makes sense because props rarely change.
 const UserProfile = memo(({ user }) => {
 
@@ -119,7 +119,7 @@ When there are no findings in direct file modes, `/hide` stays silent. Security 
 | Category | What it catches |
 |---|---|
 | Secrets and credentials | API keys, tokens, passwords, connection strings, and access-bearing endpoints |
-| Unshared rule references | References to `CLAUDE.md`, Skill instructions, or private conventions the reader cannot access |
+| Unshared rule references | References to `AGENTS.md`, Skill instructions, or private conventions the reader cannot access |
 | AI-facing rationale and guardrails | Prompt compliance, refusal justification, safety fences, and reasoning about satisfying agent instructions |
 | AI self-reference | "As an AI", "I think", "Here's the result", and similar narration |
 | Thought-process traces | Transient derivations, intermediate attempts, session logs, and temporary step-by-step reasoning |
@@ -145,7 +145,7 @@ Targets are interpreted semantically, not as regular expressions. Quoting and fi
 /hide preview the files changed in this session
 ```
 
-The default scope is files created or modified through file-editing tools in the current agent session. Git status may provide context but does not expand this inventory. Agent support files — instruction files such as `AGENTS.md` and `CLAUDE.md`, planning state, progress logs, and agent memory — are excluded by default; name them explicitly to include them.
+The default scope is files created or modified through file-editing tools in the current agent session. Git status may provide context but does not expand this inventory. Agent support files — instruction files such as `AGENTS.md`, planning state, progress logs, and agent memory — are excluded by default; name them explicitly to include them.
 
 #### Specific Files
 

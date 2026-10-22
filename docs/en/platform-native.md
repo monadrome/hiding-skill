@@ -25,7 +25,7 @@ When stripping AI leakage, prefer platform-native approaches before custom solut
 | AI Leakage Category | Native Replacement |
 |-------------------|-------------------|
 | "We chose X because..." | State the decision, link to ADR if exists |
-| "As instructed by CLAUDE.md..." | Remove — the reader doesn't have CLAUDE.md |
+| "As instructed by AGENTS.md..." | Remove — the reader doesn't have AGENTS.md |
 | "Step 1: Research, Step 2: Decide..." | Keep only the final decision/reference |
 | Dated progress entries | Git history is the progress log |
 

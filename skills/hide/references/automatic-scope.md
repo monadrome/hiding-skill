@@ -8,7 +8,7 @@ For each candidate, apply this order and stop at the first decisive rule:
 
 1. **Explicit selection**: a file the user explicitly assigns as an input to inspect, scan, clean, or write is in scope, even when it is an agent support file. A path mentioned only as content to remove is not selected. A path the user excludes is never a candidate.
 2. **Agent support file**: exclude files that exist for a coding agent to operate rather than for a human or project consumer to read. This rule precedes the task-goal rule: a support file stays excluded even when the current task created or updated it. Named cases:
-   - agent instruction and rule files: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/**`, `.github/copilot-instructions.md`, and equivalents;
+   - agent instruction and rule files: `AGENTS.md`, `.cursor/rules/**`, `.github/copilot-instructions.md`, and equivalents;
    - planning and progress state: `.planning/**`, recognizable planning-with-files state (`task_plan.md`, `findings.md`, and `progress.md` used together), and equivalent session plans or progress logs;
    - agent memory, scratch notes, and session transcripts.
 3. **Task goal**: include files directly requested as task deliverables, such as an article, report, code change, ADR, requirements document, final research conclusion, or project-facing plan.

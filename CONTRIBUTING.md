@@ -27,13 +27,13 @@ This repo has no runtime implementation or build. It contains skill definitions,
 
 ## Language conventions
 
-- Maintainer-facing content (SKILL.md body, `CLAUDE.md`, scripts, CI, this file) is **English**.
+- Maintainer-facing content (SKILL.md body, `AGENTS.md`, scripts, CI, this file) is **English**.
 - `README-zh.md` and `docs/zh/` are user-facing Chinese documentation.
 - The SKILL.md `description` frontmatter carries bilingual trigger phrases — keep both languages when editing it.
 
 ## Design constraints (read before proposing features)
 
-`/hide` is a **post-hoc cleanup tool**, not a real-time behavior constraint. Proposals that inject rules into agent sessions (always-on rule files, session hooks, statusline badges) conflict with the project philosophy and will be declined. See `CLAUDE.md` and `docs/zh/design-tradeoffs.md` for the full rationale.
+`/hide` is a **post-hoc cleanup tool**, not a real-time behavior constraint. Proposals that inject rules into agent sessions (always-on rule files, session hooks, statusline badges) conflict with the project philosophy and will be declined. See `AGENTS.md` and `docs/zh/design-tradeoffs.md` for the full rationale.
 
 Silent execution is the default. Any user-visible output must be required by the corresponding Skill workflow and covered by its reporting contract, not added ad hoc.
 

@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Split automatic scope eligibility into deliverables and agent support files. Instruction and rule files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules/**`, `.github/copilot-instructions.md`), planning and progress state, and agent memory are excluded by default and processed only when the user names them.
+- Split automatic scope eligibility into deliverables and agent support files. Instruction and rule files (`AGENTS.md`, `.cursor/rules/**`, `.github/copilot-instructions.md`), planning and progress state, and agent memory are excluded by default and processed only when the user names them.
 - Moved the agent-support exclusion ahead of the task-deliverable rule, so a support file stays excluded even when the current task created or updated it.
 - Added contract checks that fail when the agent-support exclusion, its precedence, the explicit-selection override, or the consumer test for ambiguous collections is removed.
 

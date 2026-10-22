@@ -108,7 +108,6 @@ while ((match = localLinkPattern.exec(skill)) !== null) {
 const referenceFiles = walkMarkdown(referencesDir);
 const publicDocumentationFiles = [
   path.join(root, 'AGENTS.md'),
-  path.join(root, 'CLAUDE.md'),
   path.join(root, 'README.md'),
   path.join(root, 'README-zh.md'),
   ...walkMarkdown(path.join(root, 'docs')),
@@ -166,7 +165,7 @@ if (!/whenever the request uses automatic `session` or `worktree` scope, includi
 
 const agentSupportContracts = [
   ['deliverable and agent support-file split', /\*\*Deliverables\*\*[\s\S]{0,240}\*\*Agent support files\*\*/],
-  ['agent instruction files named', /`AGENTS\.md`, `CLAUDE\.md`, `\.cursor\/rules\/\*\*`, `\.github\/copilot-instructions\.md`/],
+  ['agent instruction files named', /`AGENTS\.md`, `\.cursor\/rules\/\*\*`, `\.github\/copilot-instructions\.md`/],
   ['agent support rule precedes the task goal', /This rule precedes the task-goal rule/],
   ['agent support exclusion survives task edits', /stays excluded even when the current task created or updated it/],
   ['explicit selection overrides the support-file exclusion', /even when it is an agent support file/],

@@ -22,7 +22,7 @@ def get_user() -> dict[str, str]:
 ```markdown
 清理前：
 
-> 根据 CLAUDE.md 约定，所有 API 必须使用 gRPC。
+> 根据 AGENTS.md 约定，所有 API 必须使用 gRPC。
 > 会话记录：比较过 REST、gRPC 和 GraphQL。
 
 清理后：

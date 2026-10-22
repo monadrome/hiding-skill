@@ -13,7 +13,7 @@
 | 模式 | `/hide` 的目标 |
 |------|------------------|
 | 凭据与密钥 | 凭证、密钥、token + 强制轮换警告 |
-| 未共享规则引用 | CLAUDE.md / skill 指令 / 团队约定引用 |
+| 未共享规则引用 | AGENTS.md / skill 指令 / 团队约定引用 |
 | 面向 AI 的理由/护栏 | 面向 AI 的约束推理（"不能用 X 因为团队要求 Y"） |
 | AI 自我指涉 | "作为 AI…"、"我认为…"、"以下是结果：" |
 | 思考过程痕迹 | 逐步推理、带日期的记录、调研痕迹 |
@@ -26,7 +26,7 @@
 
 | 工具 | 是什么 | 与 `/hide` 的重叠 | 缺口 |
 |------|--------|---------------------|------|
-| [undercover](https://github.com/anasfik/undercover) | MCP server + Claude Code skill："开源推送前剥离代码和 commit 中的 AI 签名" | 定位最接近——发布前事后 scan-then-strip | 源码核实：仅 13 条文体注释模式 + 2 条 commit 措辞规则。无凭证、无 CLAUDE.md 引用，甚至不剥 `Co-Authored-By` |
+| [undercover](https://github.com/anasfik/undercover) | MCP server + Claude Code skill："开源推送前剥离代码和 commit 中的 AI 签名" | 定位最接近——发布前事后 scan-then-strip | 源码核实：仅 13 条文体注释模式 + 2 条 commit 措辞规则。无凭证、无 AGENTS.md 引用，甚至不剥 `Co-Authored-By` |
 | [papertowel](https://lib.rs/crates/papertowel) | Rust CLI，"AI code fingerprint scrubber and git history humanizer"（v0.3.8） | 单工具重叠最宽：复述式注释、硬编码密钥（7 语言 15 条 OWASP 类正则）、prompt 泄露（"As an AI language model"） | 14 个检测器中 13 个偏文体/结构层。无规则引用处理、无轮换警告。额外做 git 时间线拟人化——超出 `/hide` 范围 |
 | [aislop](https://github.com/scanaislop/aislop) | 确定性 CLI linter，运行时无 LLM（489 stars，v0.13.1） | `fix --safe` 机械移除 Claude Code/Cursor/Codex 留下的叙述式注释 | 质量 linter，非溯源清除器。无自我指涉、规则引用、凭证轮换 |
 | [crispy-comments](https://github.com/DanverImbue/crispy-comments) | Claude Code skill | 修剪注释中的 AI 思维链叙述 | 仅注释层 |

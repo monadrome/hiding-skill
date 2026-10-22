@@ -22,7 +22,7 @@ The comment records how this session reached the result, not information needed 
 ```markdown
 Before:
 
-> Per CLAUDE.md conventions, all APIs must use gRPC.
+> Per AGENTS.md conventions, all APIs must use gRPC.
 > Session notes: REST, gRPC, and GraphQL were compared.
 
 After:

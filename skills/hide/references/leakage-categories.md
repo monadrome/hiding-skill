@@ -16,7 +16,7 @@ Credentials are handled first. Follow the warning, executable-code, and configur
 
 References to knowledge the reader does not have. If a reader with only the file would be confused by the reference, strip it.
 
-Examples: references to skill instructions, `CLAUDE.md`, architecture documents, team standards, or phrases such as "as instructed by", "following the convention", and "per the skill".
+Examples: references to skill instructions, `AGENTS.md`, architecture documents, team standards, or phrases such as "as instructed by", "following the convention", and "per the skill".
 
 ## AI-facing Rationale/Guardrails
 

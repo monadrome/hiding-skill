@@ -4,7 +4,7 @@ Read this file only when the invocation contains one or more semantic targets.
 
 User targets augment, never replace, the five leakage categories and credential scan. Match by meaning: `"data sources"` includes source attributions and provenance; an exact project or rule name includes obvious contextual references. Do not broaden a target to merely related content.
 
-A path-like name can itself be a semantic target. In "remove `CLAUDE.md` references from `report.md`", scan `report.md`; do not select or read `CLAUDE.md` unless the request separately assigns it as a cleanup input.
+A path-like name can itself be a semantic target. In "remove `AGENTS.md` references from `report.md`", scan `report.md`; do not select or read `AGENTS.md` unless the request separately assigns it as a cleanup input.
 
 - In comments or prose, remove the smallest complete sentence, paragraph, list item, or block needed to hide the target while keeping the remainder coherent. Do not invent replacement facts.
 - In executable code, identifiers, or behavior-affecting config values, do not modify the match. Report `<file>:<line>` for human review without echoing sensitive values.

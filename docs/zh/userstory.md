@@ -134,7 +134,7 @@ npx skills add monadrome/hiding-skill
 **理想体验：**
 - "选择了 Redis 而不是 Memcached，因为..." → 保留（这是业务决策，读者需要知道）
 - "我调研了三种方案，首先排除了..." → 删除（这是推导过程）
-- "根据团队规范 CLAUDE.md..." → 删除（读者没有 CLAUDE.md）
+- "根据团队规范 AGENTS.md..." → 删除（读者没有 AGENTS.md）
 
 **当前状态：** ✅ 支持，但 Step 1 可能触发文件级删除（如果 80%+ 是推导过程）。触发 HITL，会询问用户是否删除整个文件。
 

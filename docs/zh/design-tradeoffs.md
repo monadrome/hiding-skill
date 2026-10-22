@@ -2,7 +2,7 @@
 
 ## 问题
 
-AI 编码助手生成的文件常携带"泄露痕迹"——AI 自指涉（"Here's the result:"）、推导链条（"we chose X because Y..."）、规则与约束引用（"按照 CLAUDE.md 的约定..."）等。这些内容会让后续读者推断文件的来源、生成过程、AI 参与和内部约束，甚至暴露安全信息。
+AI 编码助手生成的文件常携带"泄露痕迹"——AI 自指涉（"Here's the result:"）、推导链条（"we chose X because Y..."）、规则与约束引用（"按照 AGENTS.md 的约定..."）等。这些内容会让后续读者推断文件的来源、生成过程、AI 参与和内部约束，甚至暴露安全信息。
 
 面对这个问题，有两种策略：
 
@@ -21,7 +21,7 @@ AI 编码助手生成的文件常携带"泄露痕迹"——AI 自指涉（"Here'
 Before committing, pushing, or sharing files, scan them for AI-generated artifacts.
 - Don't say "As an AI", "I think", "Here's the result"
 - Don't include reasoning trails in comments
-- Don't reference CLAUDE.md or skill instructions
+- Don't reference AGENTS.md or skill instructions
 ...
 ```
 
