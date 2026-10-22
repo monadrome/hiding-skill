@@ -1,5 +1,9 @@
 # Hiding
 
+> **已停止独立维护：** 本项目现已迁至 [Omha](https://github.com/monadrome/omha) 维护。
+> 最新说明与更新见 [Omha 中的 hide Skill](https://github.com/monadrome/omha/tree/main/skills/hide)。
+> 以下文档描述独立发行版 v1.0.0，仅作为历史资料保留。
+
 [![CI](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.md)

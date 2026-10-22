@@ -4,6 +4,11 @@
 
 # Hiding
 
+> **Deprecated:** This project is now maintained in [Omha](https://github.com/monadrome/omha).
+> See [Omha's hide Skill](https://github.com/monadrome/omha/tree/main/skills/hide)
+> for current instructions and updates. The documentation below describes the
+> standalone v1.0.0 release and is retained for historical reference.
+
 [![CI](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml/badge.svg)](https://github.com/monadrome/hiding-skill/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Chinese](https://img.shields.io/badge/lang-Chinese-blue.svg)](README-zh.md)
