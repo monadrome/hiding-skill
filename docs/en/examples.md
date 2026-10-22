@@ -100,7 +100,7 @@ service:
 
 A format-safe placeholder is allowed only when the configuration remains structurally valid. A credential embedded in executable code is not silently changed; `/hide` reports the location for human review instead.
 
-Whenever a credential is found, including during a preview (`--dry-run`), `/hide` warns that the credential may need rotation. It never prints the discovered value in its report.
+Whenever a credential is found, including during a preview, `/hide` warns that the credential may need rotation. It never prints the discovered value in its report.
 
 ## 7. User-Specified Target
 

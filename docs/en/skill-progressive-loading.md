@@ -12,7 +12,7 @@ Separate the runtime loading layers from repository validation:
 | `SKILL.md` | Whenever the Skill activates | Universal workflow, ordering, safety gates, and reference routes |
 | Direct references | Only when a named condition applies | Complete selector, mode, target, or output-specific workflows |
 | Invoked scripts | When a routed workflow calls them | Deterministic, repeated operations that do not require source in model context |
-| Static checks | During repository validation, not Skill execution | Regression guards for discovery metadata, the reference graph, and required runtime anchors |
+| Static checks | During repository validation, not Skill execution | Regression guards for discovery boundaries, option fields, the reference graph, and required runtime anchors |
 
 Moving text out of `SKILL.md` helps only when the entry point states exactly when to load it. An unconditional reference merely relocates the same context cost.
 
@@ -31,7 +31,7 @@ Do not move an invariant behind a later route. A write-safety rule, for example,
 ## Reference Structure
 
 - Link every runtime reference directly from `SKILL.md`; keep the graph one level deep.
-- Name the load condition beside the link. Prefer "when `--files worktree` is selected, read ..." over "see ... for details."
+- Name the load condition beside the link. Prefer "when `files` selects `worktree`, read ..." over "see ... for details."
 - Begin each reference with its own load condition so it remains safe when opened directly.
 - Resolve selection and eligibility before loading content-scanning rules when the selection may be empty or excluded.
 - Keep one coherent conditional workflow together. Do not fragment a short branch merely to reduce line counts.
@@ -50,7 +50,7 @@ Add behavioral harness text only when all of these are true:
 - A focused instruction can prevent the failure without constraining ordinary reasoning across unrelated cases.
 - The instruction is placed where it is available before the failing decision.
 
-Do not add rules for hypothetical mistakes that the baseline model handles reliably. Use static checks proactively for deterministic structure, such as immutable discovery text and reference reachability. Once an observed baseline failure justifies a behavioral harness, add a focused anchor when losing that wording would recreate the failure. Static checks do not supply runtime instructions and should not reproduce the whole Skill.
+Do not add rules for hypothetical mistakes that the baseline model handles reliably. Use static checks proactively for deterministic structure, such as discovery boundaries and reference reachability. Allow description wording to improve while preserving its scope, bilingual triggers, and exclusions. Once an observed baseline failure justifies a behavioral harness, add a focused anchor when losing that wording would recreate the failure. Static checks do not supply runtime instructions and should not reproduce the whole Skill.
 
 ## Evaluation Loop
 
@@ -65,6 +65,22 @@ Do not add rules for hypothetical mistakes that the baseline model handles relia
 9. Repeat until another reduction would remove project-specific knowledge or high-consequence safeguards for negligible context savings.
 
 Credential assertions apply to user-visible output and written artifacts. A model must read a source credential to detect it, so hidden reasoning or raw tool transport is not itself an output leak.
+
+## Representative Scenarios
+
+These are behavioral evaluation cases, not claims of measured accuracy. Run them in isolated fixtures and inspect file access, writes, and visible output; static checks alone cannot establish these outcomes.
+
+| Request or fixture | Expected behavior |
+|--------------------|-------------------|
+| "Hide AI traces in report.md" and its Chinese paraphrase | Select the Skill and the named file |
+| "Improve this paragraph's style" or "Clean up your last chat reply" | Do not implicitly select this file-cleanup Skill |
+| `files report.md, mode newfile, targets data sources` | Infer the fields without requiring fixed order or quoting; preserve the original |
+| "Remove AGENTS.md references from report.md; do not touch config.yml" | Read report.md only; treat AGENTS.md as a target and config.yml as excluded |
+| "Preview this session" with an unavailable session inventory | Report the limitation; do not substitute Git changes |
+| A worktree with code, AGENTS.md, agent progress state, and an uncertain note | Resolve the local base and exclude support and low-confidence files before reading content |
+| A preview containing a credential in a purge candidate | Write nothing; report only a redacted location and rotation warning; do not ask to delete |
+| A code comment selected for cleanup beside executable code, a TODO, and durable rationale | Remove only the leakage; preserve runtime content, useful rationale, line endings, and silent completion |
+| A changed mtime or an occupied cleaned-copy destination | Abort concurrent writes; use a numbered output for collisions and report its name |
 
 ## Project Result
 
@@ -85,6 +101,9 @@ Seven conditional workflows moved into directly routed references. DeepSeek V4 P
 
 ## Further Reading
 
+- [OpenAI: Build skills](https://developers.openai.com/codex/build-skills)
+- [Anthropic: Lessons from building Claude Code: How we use skills](https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills)
+- [Anthropic: Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 - [Agent Skills specification](https://agentskills.io/specification)
 - [Agent Skills best practices](https://agentskills.io/skill-creation/best-practices)
 - [Evaluating Agent Skills](https://agentskills.io/skill-creation/evaluating-skills)

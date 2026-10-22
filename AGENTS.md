@@ -55,7 +55,7 @@ Treat everything after `/hide` as a natural-language request. Infer semantic tar
 /hide preview report.md and remove data-source and internal-review references
 ```
 
-Traditional forms remain optional compatibility aliases: `--dry-run` means preview, `--mode` selects `inplace`/`newfile`/`backup`, `--files` identifies literal or automatic scope, and `--use-subagent` requests fresh-context candidate detection. They may appear in any order or be mixed with prose. Do not require quoting, a fixed position, single occurrence, or exact option spelling when the intent is otherwise clear.
+Supported option fields: `targets` describes additional content to remove, `files` identifies literal or automatic scope, `dry-run` requests preview, `mode` selects `inplace`/`newfile`/`backup`, and `use-subagent` requests fresh-context candidate detection. Fields may appear in any order, repeat, or mix with prose. Natural language does not require field names, quoting, or exact option spelling when the intent is clear.
 
 Resolve path-like mentions by their role. A file is unconditionally in scope only when the user assigns it as an input to inspect, scan, clean, or write. A path named as content to remove is a semantic target, not a scope selection; a path the user excludes must never be read or written. Combine and de-duplicate requested scope sources after applying exclusions; default to current-session files and `inplace` output when omitted. Ask only when ambiguity would materially change which files are read or written, whether writes occur, or where output is placed.
 

@@ -179,7 +179,7 @@ Existing output targets are never overwritten. Numbered alternatives such as `-c
 
 Credentials are scanned before any style cleanup or purge decision.
 
-- A discovered credential always triggers a rotation warning, including under `--dry-run`.
+- A discovered credential always triggers a rotation warning, including during preview.
 - Secret values are redacted from reports.
 - Credentials in executable code are not silently edited.
 - Configuration credentials are replaced only when a format-safe placeholder preserves structure; otherwise they remain unchanged and are reported for human review.
@@ -201,15 +201,15 @@ A fresh-context sub-agent identifies candidate leakage locations only. The main 
 /hide [describe what to hide, where to look, and how to handle the result]
 ```
 
-| Intent | Example phrasing | Default |
+| Field | Meaning and example phrasing | Default |
 |---|---|---|
-| Additional content | "remove data-source references" | Built-in categories only |
-| Scope | "README.md and config.yml", "this session", "the worktree" | Current session |
-| Preview | "preview", "show findings", "do not change files" | Write after verification |
-| Output | "edit in place", "write a cleaned copy", "back up the original" | `inplace` |
-| Fresh context | "use a fresh-context sub-agent" | Main agent only |
+| `targets` | Additional content: "remove data-source references" | Built-in categories only |
+| `files` | Scope: "README.md and config.yml", "this session", "the worktree" | `session` |
+| `dry-run` | Preview: "preview", "show findings", "do not change files" | Off |
+| `mode` | Output: `inplace`, `newfile` ("write a cleaned copy"), `backup` ("back up the original") | `inplace` |
+| `use-subagent` | Fresh context: "use a fresh-context sub-agent" | Off |
 
-The legacy `--files`, `--mode`, `--dry-run`, and `--use-subagent` forms remain supported. They may appear in any order or alongside prose; the Skill resolves intent rather than enforcing an argument grammar. It asks for clarification only when ambiguity would materially change file access or writes.
+Fields may appear in any order, repeat, or mix with prose. Natural language does not need field names or a fixed syntax. The Skill asks for clarification only when ambiguity would materially change file access or writes.
 
 ## Philosophy
 
@@ -232,7 +232,7 @@ For important files, start by asking for a preview, inspect credential and confi
 
 ## Updating
 
-Version 0.10.0 publishes the npm package under the `@monadrome` scope; replace `@huatalk/hiding-skill` with `@monadrome/hiding-skill` in your dependency list. Version 0.9.1 accepts natural-language requests and keeps the previous flags as optional compatibility aliases. Version 0.9.0 renamed the installed skill command to `/hide`; the pre-0.9 command is not included as an alias.
+Use `@monadrome/hiding-skill` for npm installs. See the [changelog](CHANGELOG.md) for version-specific changes and migration details.
 
 Agent Skills:
 

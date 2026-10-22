@@ -6,7 +6,7 @@ On silent paths, use tools without narration and end the turn immediately after 
 
 The only other user-visible outputs are:
 
-- Session HITL findings and choices, whole-file purge confirmation, and previews (including `--dry-run`).
+- Session HITL findings and choices, whole-file purge confirmation, and previews (including `dry-run`).
 - Credential rotation warnings, plus Session zero-findings and unavailable-inventory notices.
 - Input errors, structural-validation failures, and concurrent-modification aborts.
 - Numbered collision filenames, sub-agent fallback notices, and user-target matches in executable content that require review.

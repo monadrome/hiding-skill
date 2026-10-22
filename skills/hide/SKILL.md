@@ -1,6 +1,6 @@
 ---
 name: hide
-description: Strategically remove AI leakage, provenance clues, exposed constraints, credentials, and any user-specified content from files without changing executable behavior. Use for concealment or release hygiene. Triggers include clean AI traces, hide source, hide constraints, 隐藏 AI 痕迹、清理规则、隐藏数据来源、隐藏约束、清理 xxx 痕迹。
+description: Removes AI traces, provenance clues, exposed constraints, credentials, and user-specified content from files. Use when asked to hide source, clean AI traces, remove sensitive references, 隐藏 AI 痕迹、隐藏数据来源、隐藏约束、清理 xxx 痕迹, or perform release hygiene. File cleanup only; not prose humanization, ordinary editing, or conversation cleanup.
 metadata:
   author: monadrome
   version: "0.10.0"
@@ -9,50 +9,46 @@ metadata:
 
 # /hide
 
-**Scope**: Code, config, markdown, and documentation files only. Agent replies and conversation output are out of scope.
-
 ## Core Contract
 
 - Do not inject persistent constraints into normal sessions.
-- Process files only; do not modify agent replies or conversation output.
+- Process code, config, Markdown, and documentation files only; do not modify agent replies or conversation output.
 - Remove leakage without changing code logic or doing humanizer-style rewrites.
 - Leave no cleanup trace, visible gap, marker, metadata, or unrelated formatting change.
-- Stay silent unless a documented exception applies; with no findings outside Session HITL or preview intent, do nothing and say nothing.
-- On silent paths, emit tool calls only from the start and do not narrate analysis; after successful verification, end the turn with no text.
-- Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path.
 - Always warn and recommend rotation when credentials are found.
 - Require explicit confirmation before deleting an entire file.
-- Automatically scan deliverables, not agent support files — instruction and rule files, planning state, progress logs, or agent memory — which are processed only when the user names them.
+- Automatically scan deliverables, not agent support files (instructions, rules, planning state, progress logs, or memory); process support files only when explicitly selected.
 - Preserve behavior across supported agent environments.
 
-## Usage
+## Gotchas
 
-```
-/hide [natural-language request]
-```
+- **Silent output**: Stay silent unless a documented exception applies; with no findings outside Session HITL or preview intent, do nothing and say nothing. On silent paths, emit tool calls only from the start and do not narrate analysis. Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path.
+- **Credential output**: Identify credentials only by a fixed `[REDACTED]` label and file/line/key location. Never emit or describe a value substring, recognizable prefix or suffix, format, pattern, provider-specific scheme or token type, original length, or shape.
+- **False positives**: Preserve durable requirements, decisions, trade-offs, and research conclusions. TODO/FIXME/HACK and first-person prose are not leakage by themselves; judge audience and purpose using the leakage categories.
 
-Examples:
+## Intent Resolution
+
+Treat the full invocation text after `/hide` as a natural-language request. Infer semantic targets, literal files and/or automatic `session` or `worktree` scope, preview versus write intent, output mode, and fresh-context review.
 
 ```text
 /hide preview the files changed in this session
-/hide clean README.md and config.yml
 /hide remove data-source references from report.md and write a cleaned copy
 /hide review the current worktree with a fresh-context sub-agent without changing files
 ```
 
-### Intent Resolution
+### Options
 
-Treat the full invocation text after `/hide` as a natural-language request. Infer, from any order or phrasing:
+| Field | Meaning | Default |
+|-------|---------|---------|
+| `targets` | Semantic descriptions of additional content to remove | Built-in categories only |
+| `files` | Literal input files, `session`, and/or `worktree` | `session` |
+| `dry-run` | Preview findings without writing | Off |
+| `mode` | `inplace`, `newfile`, or `backup` | `inplace` |
+| `use-subagent` | Fresh-context candidate detection | Off |
 
-- semantic content targets that augment the built-in scan;
-- literal files and/or automatic `session` or `worktree` scope;
-- preview versus write intent;
-- `inplace`, `newfile`, or `backup` output behavior;
-- whether fresh-context sub-agent detection is requested.
+Options may appear in any order, repeat, or mix with prose. Do not require users to quote multi-word targets, place targets before options, or use exact field syntax. Interpret misspellings and option-like text by meaning when confidence is high.
 
-Do not require users to quote multi-word targets, place targets before options, or use exact flag syntax. Legacy forms such as `--files`, `--mode`, `--dry-run`, and `--use-subagent` remain supported as compatibility aliases and may be mixed with prose or appear in any order. Interpret misspellings and option-like text by meaning when confidence is high; do not fail solely because the input violates the legacy grammar.
-
-Resolve each path-like mention by its role in the request. A path is an unconditional literal scope selection only when the user assigns it as an input to inspect, scan, clean, or write, including through `--files`. A path named as content to remove (for example, "remove `AGENTS.md` references from `report.md`") is a semantic target, not a scope selection. A path in an exclusion such as "do not touch `config.yml`" must never be read or written. Automatic `session` and `worktree` selections use their conditional workflows for remaining candidates. Combine and de-duplicate requested scope sources after applying exclusions. If no scope is expressed, default to `session`; if no output behavior is expressed, default to `inplace`.
+Resolve path-like mentions by their role. A path is an unconditional literal scope selection only when the user assigns it as an input to inspect, scan, clean, or write. A path named as content to remove ("remove `AGENTS.md` references from `report.md`") is a semantic target, not a scope selection. A path in an exclusion ("do not touch `config.yml`") must never be read or written. Combine and de-duplicate requested scope sources after applying exclusions. Automatic selections follow their routed workflows. Default to `session` scope and `inplace` output.
 
 Treat descriptions of content to remove as semantic targets, not regexes. Ask a concise clarification only when a path's role or another ambiguity would materially change which files are read or written, whether files are modified, or where output is placed. Otherwise choose the clear intent and proceed.
 
@@ -84,15 +80,13 @@ After literal selection or automatic scope chooses a file and Step 0 validates i
 
 Before any purge decision, scan every line, key, and value for credentials. Credentials grant access; internal names, non-access-bearing URLs, and mock labels are not credentials. Record findings and the required warning without modifying the file yet.
 
-In output, identify credentials only by a fixed `[REDACTED]` label and file/line/key location. Never emit or describe a value substring, recognizable prefix or suffix, format, pattern, provider-specific scheme or token type, original length, or shape. Credentials in executable code require human review. Configuration credentials may be replaced only with a format-safe placeholder during Step 3.
-
 The warning fires after the outcome is known even if the file is deleted as a purge candidate or left unchanged:
 
 > **"Security-sensitive content (credentials/keys/tokens) was found {and removed / preview only / but not removed}. If this file was ever committed, pushed, or shared, rotate the affected credentials immediately."**
 
 ### Step 2: File-Level Purge Check (HITL)
 
-Ask: after removing transient thought-process traces, AI-facing rationale/guardrails, AI self-reference, and user-target matches, would any section remain useful standalone reference? If no, treat the file as a purge candidate. Durable requirements, architecture decisions, trade-offs, research conclusions, and other reader-facing rationale remain useful reference and must not count toward purge signals.
+Ask: after removing transient thought-process traces, AI-facing rationale/guardrails, AI self-reference, and user-target matches, would any section remain useful standalone reference? If no, treat the file as a purge candidate. Durable reader-facing content must not count toward purge signals.
 
 Do not strip a purge candidate. Under preview intent, report it as a would-delete candidate without requesting or acting on deletion confirmation. Otherwise ask whether to delete it; delete only on explicit confirmation, or leave it untouched and stop processing that file. Emit any Step 1 credential warning regardless of this choice.
 
@@ -104,12 +98,7 @@ Then remove unshared rule references, AI-facing rationale/guardrails, AI self-re
 
 ### Step 4: Verify
 
-Validate a temporary candidate before changing the original:
-- **JSON**: run `python3 -c "import json; json.load(open('FILE'))"` or `jq . FILE`
-- **YAML**: run `python3 -c "import yaml; yaml.safe_load(open('FILE'))" 2>/dev/null`. If this fails with `ModuleNotFoundError` (PyYAML is NOT standard library), fall back to visual inspection — do NOT treat the missing module as a YAML syntax error.
-- **XML**: run `xmllint --noout FILE`
-- **Code files**: visually check brace/bracket matching, import/directive integrity
-- **Markdown**: check heading hierarchy and code block delimiter matching
+Validate a temporary candidate before changing the original. Use installed parsers for JSON (`jq` or Python `json`), YAML (PyYAML), and XML (`xmllint`). A missing parser or `ModuleNotFoundError` permits visual fallback; a syntax error fails validation. For code, check delimiters, imports, and directives; for Markdown, check heading hierarchy and code fences.
 
 After stripping, re-read the candidate once. On failure, discard it and leave the original untouched. Report: "Structural issue detected after cleaning — file left unchanged. Human review needed." A successful visual fallback is silent.
 

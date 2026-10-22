@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Documented `targets`, `files`, `dry-run`, `mode`, and `use-subagent` as option fields that can mix with natural language, without command-line notation or compatibility history in runtime instructions.
+- Refined bilingual discovery triggers and exclusions, consolidated repeated instructions, and collected silent-output, credential-redaction, and false-positive pitfalls in a Gotchas section.
+- Replaced the fixed description hash with scope and boundary checks; added guards for supported fields and current-behavior documentation.
+
 ### Documentation
 
+- Synchronized option fields across the reference card and usage docs, and added representative evaluation scenarios and official OpenAI and Anthropic authoring references.
 - Added a Chinese promotional article covering cleanup scenarios, installation, and current natural-language and compatibility commands.
 
 ## [0.10.0] - 2026-09-08

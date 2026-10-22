@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const yaml = require('js-yaml');
 
 const root = path.join(__dirname, '..');
@@ -10,7 +9,6 @@ const skillDir = path.join(root, 'skills', 'hide');
 const skillPath = path.join(skillDir, 'SKILL.md');
 const referencesDir = path.join(skillDir, 'references');
 const legacySkillDir = path.join(root, 'skills', 'hiding');
-const expectedDescriptionSha256 = '343fa0d3a526db0b36d296b57a73683e93089e7918a27bf8222ffa578c901972';
 
 const failures = [];
 
@@ -70,9 +68,22 @@ if (!frontmatterMatch) {
     fail('SKILL.md name must be hide.');
   }
   const description = frontmatterValue(frontmatter, 'description') || '';
-  const descriptionSha256 = crypto.createHash('sha256').update(description).digest('hex');
-  if (descriptionSha256 !== expectedDescriptionSha256) {
-    fail('SKILL.md description changed.');
+  if (description.length === 0 || description.length > 1024) {
+    fail('SKILL.md description must contain 1-1024 characters.');
+  }
+  const discoveryContracts = [
+    ['file scope', /\bfiles\b/i],
+    ['AI cleanup trigger', /\bAI (?:traces|leakage|participation)\b/i],
+    ['provenance cleanup', /\b(?:provenance|sources?)\b/i],
+    ['constraint cleanup', /\bconstraints?\b/i],
+    ['credential cleanup', /\bcredentials?\b/i],
+    ['user-specified targets', /user-specified/i],
+    ['Chinese triggers', /[\u3400-\u4dbf\u4e00-\u9fff]/],
+    ['conversation boundary', /\bnot\b[^.]*\b(?:conversation|chat)\b/i],
+    ['humanization boundary', /\bnot\b[^.]*\b(?:humanization|humanizer)\b/i],
+  ];
+  for (const [label, pattern] of discoveryContracts) {
+    if (!pattern.test(description)) fail(`SKILL.md description is missing: ${label}.`);
   }
   if (frontmatterValue(frontmatter, 'argument-hint') !== null) {
     fail('SKILL.md must not impose an argument-hint grammar.');
@@ -180,7 +191,7 @@ const reporting = readRegularFile(path.join(referencesDir, 'reporting.md'));
 const requiredReportingContracts = [
   ['silent tool execution and completion', /use tools without narration and end the turn immediately after successful verification with no assistant text block/],
   ['silent acknowledgments forbidden', /Never say `Done`, `Cleaned`, `Complete`, `Success`, or any equivalent acknowledgment/],
-  ['HITL, purge, and preview output', /Session HITL findings and choices, whole-file purge confirmation, and previews \(including `--dry-run`\)/],
+  ['HITL, purge, and preview output', /Session HITL findings and choices, whole-file purge confirmation, and previews \(including `dry-run`\)/],
   ['credential and Session status output', /Credential rotation warnings, plus Session zero-findings and unavailable-inventory notices/],
   ['input, structure, and concurrency errors', /Input errors, structural-validation failures, and concurrent-modification aborts/],
   ['collision, sub-agent, and protected-target output', /Numbered collision filenames, sub-agent fallback notices, and user-target matches in executable content/],
@@ -213,8 +224,8 @@ if (skill.indexOf('(references/automatic-scope.md)') > skill.indexOf('(reference
 const corpus = [skill, ...referenceFiles.map(read)].join('\n');
 const requiredInlineContracts = [
   ['natural-language request parsing', /Treat the full invocation text after `\/hide` as a natural-language request/],
-  ['no mandatory legacy grammar', /Do not require users to quote multi-word targets, place targets before options, or use exact flag syntax/],
-  ['legacy flag compatibility', /Legacy forms such as `--files`, `--mode`, `--dry-run`, and `--use-subagent` remain supported as compatibility aliases/],
+  ['flexible option input', /Do not require users to quote multi-word targets, place targets before options, or use exact field syntax/],
+  ['options may repeat or mix with prose', /Options may appear in any order, repeat, or mix with prose/],
   ['cleanup-input path role', /A path is an unconditional literal scope selection only when the user assigns it as an input to inspect, scan, clean, or write/],
   ['path-like semantic target role', /A path named as content to remove[^\n]+is a semantic target, not a scope selection/],
   ['explicit path exclusion', /A path in an exclusion[^\n]+must never be read or written/],
@@ -224,7 +235,7 @@ const requiredInlineContracts = [
   ['silent tool-only execution', /On silent paths, emit tool calls only from the start and do not narrate analysis/],
   ['no silent completion text block', /Silent termination means emitting no assistant text block at all/],
   ['no one-word completion acknowledgment', /Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path/],
-  ['credential output is fully redacted', /identify credentials only by a fixed `\[REDACTED\]` label and file\/line\/key location/],
+  ['credential output is fully redacted', /identify credentials only by a fixed `\[REDACTED\]` label and file\/line\/key location/i],
   ['credential descriptors are not exposed', /Never emit or describe a value substring, recognizable prefix or suffix, format, pattern, provider-specific scheme or token type, original length, or shape/],
   ['default inplace behavior', /default `inplace` mode replaces the original only after successful validation/],
   ['line endings before writes', /Before any write, preserve the file's original line ending style/],
@@ -237,6 +248,16 @@ const requiredInlineContracts = [
 
 for (const [label, pattern] of requiredInlineContracts) {
   if (!pattern.test(skill)) fail(`Always-loaded contract is missing from SKILL.md: ${label}.`);
+}
+
+for (const field of ['targets', 'files', 'dry-run', 'mode', 'use-subagent']) {
+  if (!new RegExp('^\\|\\s*`' + field + '`\\s*\\|', 'm').test(skill)) {
+    fail(`Supported option field is missing from SKILL.md: ${field}.`);
+  }
+}
+
+if (/\blegacy\b|backward[- ]compatib|compatibility alias/i.test(corpus)) {
+  fail('Installed skill instructions must describe current behavior without compatibility history.');
 }
 
 const requiredContracts = [
@@ -256,14 +277,8 @@ for (const [label, pattern] of requiredContracts) {
   if (!pattern.test(corpus)) fail(`Required contract is missing: ${label}.`);
 }
 
-const staleFlags = [
-  ['--subagent', /(^|[^-])--subagent\b/m],
-  ['--artifacts', /(^|[^-])--artifacts\b/m],
-  ['--to-hide', /(^|[^-])--to-hide\b/m],
-];
-
-for (const [flag, pattern] of staleFlags) {
-  if (pattern.test(corpus)) fail(`Stale flag found in the installed skill: ${flag}`);
+if (/--(?:files|mode|dry-run|use-subagent|subagent|artifacts|to-hide)\b/.test(corpus)) {
+  fail('Installed skill options must use field names rather than command-line flag notation.');
 }
 
 const publicContractCorpus = [
@@ -278,7 +293,7 @@ if (/\/hiding(?![-:A-Za-z0-9_])|skills\/hiding(?:\/|$)/m.test(publicContractCorp
 const strictGrammarPatterns = [
   ['targets before flags', /targets?\s+must\s+(?:precede\b|(?:appear|be placed)\s+before\b)/i, 'Targets must precede the first flag.'],
   ['quoted targets containing spaces', /quote\s+targets?\s+containing\s+spaces|targets?\s+containing\s+spaces\s+must\s+be\s+quoted/i, 'Quote targets containing spaces.'],
-  ['single files flag', /`--files` (?:appears|may appear) at most once/i, '`--files` appears at most once.'],
+  ['single files option', /`(?:--)?files` (?:appears|may appear) at most once/i, '`files` appears at most once.'],
   ['reserved standalone selectors', /reserved (?:standalone )?selectors?.*(?:only value|never mix)/i, '`session` and `worktree` are reserved selectors and each must be the only value.'],
   ['syntax-only rejection', /reject positional targets|unknown\/misspelled flags/i, 'Reject positional targets after the first flag.'],
 ];

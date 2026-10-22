@@ -14,7 +14,7 @@ Before H2 or any content scan, classify uncertain files autonomously from task g
 
 ## Step H2: Leakage Candidate Detection
 
-Scan only eligible inventory files using the loaded leakage categories and any user-specified targets. With fresh-context sub-agent intent, including the `--use-subagent` alias, use its candidate list as detection evidence; the main agent still performs credential scanning, purge classification, tiering, and every later decision.
+Scan only eligible inventory files using the loaded leakage categories and any user-specified targets. With fresh-context sub-agent intent, including `use-subagent`, use its candidate list as detection evidence; the main agent still performs credential scanning, purge classification, tiering, and every later decision.
 
 | Tier | Finding |
 |------|---------|

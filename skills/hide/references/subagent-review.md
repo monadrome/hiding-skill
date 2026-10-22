@@ -1,6 +1,6 @@
 # Sub-Agent Review
 
-Read this file only when the request asks for fresh-context sub-agent detection, including the `--use-subagent` compatibility alias.
+Read this file only when the request asks for fresh-context sub-agent detection, including `use-subagent`.
 
 The sub-agent detects candidate leakage only. The main agent always executes Steps 0-4 and owns scope, credential scanning, purge decisions, confirmations, edits, warnings, validation, output modes, and writes.
 
