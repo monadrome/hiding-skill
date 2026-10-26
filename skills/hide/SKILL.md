@@ -16,13 +16,14 @@ metadata:
 - Remove leakage without changing code logic or doing humanizer-style rewrites.
 - Leave no cleanup trace, visible gap, marker, metadata, or unrelated formatting change.
 - Always warn and recommend rotation when credentials are found.
+- For user-specified targets, automatically remove only high-confidence matches isolated in the smallest complete comment or prose unit; preserve ambiguous matches for review in every mode.
 - Require explicit confirmation before deleting an entire file.
 - Automatically scan deliverables, not agent support files (instructions, rules, planning state, progress logs, or memory); process support files only when explicitly selected.
 - Preserve behavior across supported agent environments.
 
 ## Gotchas
 
-- **Silent output**: With no findings outside Session HITL or preview intent, do nothing and say nothing. On silent paths, emit tool calls only from the start and do not narrate analysis. Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path. The last required tool result is terminal: send no assistant text afterward.
+- **Silent output**: With no findings outside Session HITL or preview intent, do nothing and say nothing. On silent paths, emit tool calls only from the start and do not narrate analysis. Silent termination means emitting no assistant text block at all. Never say `Done`, `Cleaned`, `Complete`, `Success`, or summarize what changed on a silent path. On a silent path, the last required tool result is terminal: send no assistant text afterward. Step 4's successful-write summary is a documented silence exception.
 - **Credential output**: Identify credentials only by a fixed `[REDACTED]` label and file/line/key location. Never emit or describe a value substring, recognizable prefix or suffix, format, pattern, provider-specific scheme or token type, original length, or shape.
 - **False positives**: Preserve durable requirements, decisions, trade-offs, and research conclusions. TODO/FIXME/HACK and first-person prose are not leakage by themselves; judge audience and purpose using the leakage categories.
 
@@ -33,7 +34,9 @@ Only the following outputs and the routed cleanup follow-up answer are allowed:
 - Session findings and choices, zero-findings or unavailable-inventory notices; purge confirmation; previews.
 - Credential rotation warnings; input errors, structural-validation failures, and concurrent-modification aborts.
 - Numbered collision filenames, sub-agent fallback notices, and protected user-target matches requiring review.
+- Ambiguous/review-only user-target matches requiring human review, reported with `<file>:<line>` and a brief reason.
 - Worktree resolution errors, empty selections, preview base/file reports, and scope questions required to complete an explicit request.
+- Successful-write summaries limited to actual modified/created file paths and validation-passed status.
 
 ## Intent Resolution
 
@@ -85,11 +88,11 @@ Before any purge decision, scan every line, key, and value for credentials. Cred
 
 In Session HITL, show the following outcome-neutral warning once with Tier 0 findings before waiting for selection. Otherwise emit it after the outcome is known. The warning is required even if the file is deleted as a purge candidate or left unchanged:
 
-> **"Security-sensitive content (credentials/keys/tokens) was found. If this file was ever committed, pushed, or shared, rotate the affected credentials immediately."**
+> **"Security-sensitive content (credentials/keys/tokens) was found. Reading or scanning credentials may already have exposed their values in session JSONL logs or through API requests to the LLM. Treat them as potentially compromised and rotate the affected credentials immediately."**
 
 ### Step 2: File-Level Purge Check (HITL)
 
-Ask: after removing transient thought-process traces, AI-facing rationale/guardrails, AI self-reference, and user-target matches, would any section remain useful standalone reference? If no, treat the file as a purge candidate. Durable reader-facing content must not count toward purge signals.
+Ask: after removing transient thought-process traces, AI-facing rationale/guardrails, AI self-reference, and eligible user-target matches, would any section remain useful standalone reference? If no, treat the file as a purge candidate. Durable reader-facing content must not count toward purge signals.
 
 Do not strip a purge candidate. Under preview intent, report it as a would-delete candidate without requesting or acting on deletion confirmation. Otherwise ask whether to delete it; delete only on explicit confirmation, or leave it untouched and stop processing that file. Emit any pending Step 1 credential warning regardless of this choice.
 
@@ -97,21 +100,23 @@ Do not strip a purge candidate. Under preview intent, report it as a would-delet
 
 First remove allowed credential values identified in Step 1. Do not modify credentials in executable code; report the line for review. Replace configuration credentials only with a format-safe placeholder; otherwise leave them and request review.
 
-Then remove unshared rule references, AI-facing rationale/guardrails, AI self-reference, transient thought-process traces, and allowed matches for user-specified targets.
+Then remove unshared rule references, AI-facing rationale/guardrails, AI self-reference, transient thought-process traces, and eligible matches for user-specified targets.
 
 ### Step 4: Verify
 
 Validate a temporary candidate before changing the original. Use installed parsers for JSON (`jq` or Python `json`), YAML (PyYAML), and XML (`xmllint`). A missing parser or `ModuleNotFoundError` permits visual fallback; a syntax error fails validation. For code, check delimiters, imports, and directives; for Markdown, check heading hierarchy and code fences.
 
-After stripping, re-read the candidate once. On failure, discard it and leave the original untouched. Report: "Structural issue detected after cleaning — file left unchanged. Human review needed." A successful visual fallback is silent.
+After stripping, re-read the candidate once. On failure, discard it and leave the original untouched. Report: "Structural issue detected after cleaning — file left unchanged. Human review needed." A successful visual fallback does not emit a separate validation notice.
 
 The default `inplace` mode replaces the original only after successful validation. Before any write, preserve the file's original line ending style (LF vs CRLF) and compare mtime with the value observed when reading; if it changed, warn and abort. Replace atomically where supported.
 
+After successful `inplace`, `newfile`, or `backup` writes, emit a concise summary listing each file path actually modified or created and stating that validation passed. Include the actual backup path when a backup was created. Do not list removed content, leakage categories, or values. This summary is a documented silence exception. With no write, remain silent only if no required review findings or other allowed output need to be reported; required ambiguous/review-only findings must not be suppressed merely because no write occurred.
+
 ## Strip Strategy by File Type
 
-- **Code**: Remove comment lines matching leakage categories or user targets. Keep executable code, string literals, and runtime-visible doc strings as-is; report those matches for human review. If removing a comment would leave an empty comment block (e.g., `/** */`), remove the whole block.
-- **Markdown**: Remove paragraphs and sentences matching leakage categories or user targets. Keep technical content.
+- **Code**: Remove comment lines matching leakage categories or eligible user targets. Keep executable code, string literals, and runtime-visible doc strings as-is; report those matches for human review. If removing a comment would leave an empty comment block (e.g., `/** */`), remove the whole block.
+- **Markdown**: Remove paragraphs and sentences matching leakage categories or eligible user targets. Keep technical content.
 - **Config**: Remove leakage comments. Handle credential values only as Step 3 permits; report user-target matches in behavior-affecting values for human review. Keep config structure and other values. For YAML block scalars (`|`, `>`), replace the entire scalar value only when the permitted edit remains format-safe.
-- **Other**: Remove any comment or prose matching the leakage categories or user targets.
+- **Other**: Remove any comment or prose matching the leakage categories or eligible user targets.
 
 Remove a multi-line leakage block as a whole.

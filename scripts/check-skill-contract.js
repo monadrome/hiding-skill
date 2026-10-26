@@ -193,7 +193,9 @@ const requiredReportingContracts = [
   ['HITL, status, purge, and preview output', /Session findings and choices, zero-findings or unavailable-inventory notices; purge confirmation; previews/],
   ['credential, input, structure, and concurrency output', /Credential rotation warnings; input errors, structural-validation failures, and concurrent-modification aborts/],
   ['collision, sub-agent, and protected-target output', /Numbered collision filenames, sub-agent fallback notices, and protected user-target matches requiring review/],
+  ['ambiguous review findings output', /Ambiguous\/review-only user-target matches requiring human review, reported with `<file>:<line>` and a brief reason/],
   ['worktree and blocking-scope output', /Worktree resolution errors, empty selections, preview base\/file reports, and scope questions required to complete an explicit request/],
+  ['successful-write summary output', /Successful-write summaries limited to actual modified\/created file paths and validation-passed status/],
 ];
 
 for (const [label, pattern] of requiredReportingContracts) {
@@ -202,6 +204,31 @@ for (const [label, pattern] of requiredReportingContracts) {
 if (!/Read this file only when asked what was removed or whether cleanup ran/.test(reporting)
     || !/Reply only: "X leakage categories were addressed\." Do not itemize or celebrate\./.test(reporting)) {
   fail('Conditional cleanup follow-up contract is missing.');
+}
+
+const userTargets = readRegularFile(path.join(referencesDir, 'user-targets.md'));
+const sessionMode = readRegularFile(path.join(referencesDir, 'session-mode.md'));
+const outputModes = readRegularFile(path.join(referencesDir, 'output-modes.md'));
+const focusedSafetyContracts = [
+  ['credential warning covers session JSONL exposure', skill, /Reading or scanning credentials may already have exposed their values in session JSONL logs/],
+  ['credential warning covers LLM API exposure', skill, /through API requests to the LLM/],
+  ['credential warning requires immediate rotation', skill, /Treat them as potentially compromised and rotate the affected credentials immediately/],
+  ['semantic automatic removal requires high confidence and isolation', userTargets, /only high-confidence matches that can be isolated in the smallest complete sentence, paragraph, list item, or block needed to hide the target are eligible for automatic removal/],
+  ['ambiguous semantic criteria are explicit', userTargets, /merely related, requires speculation, has uncertain contextual meaning, or cannot be isolated while preserving unrelated or durable technical content/],
+  ['ambiguous semantic matches are preserved and reviewed', userTargets, /Preserve it unchanged and report `<file>:<line>` with a brief reason for human review in every mode/],
+  ['ambiguous semantic matches are excluded from automatic cleanup', userTargets, /Ambiguous matches are review-only: never include them in automatic cleanup or Session `Hide everything found`/],
+  ['preview distinguishes semantic match dispositions', outputModes, /label automatically removable high-confidence matches as `would-remove` and ambiguous matches as `preserved\/review-only`/],
+  ['Session preview distinguishes ambiguous semantic matches', sessionMode, /Also show automatically removable high-confidence user-target matches as `would-remove` and ambiguous user-target matches as `preserved\/review-only`, then stop/],
+  ['zero semantic matches add no per-target notices', userTargets, /Zero matches for a target do not add separate per-target notices in any mode/],
+  ['successful writes summarize paths and validation', skill, /After successful `inplace`, `newfile`, or `backup` writes, emit a concise summary listing each file path actually modified or created and stating that validation passed/],
+  ['successful-write summary withholds removal details', skill, /Do not list removed content, leakage categories, or values/],
+  ['Step 4 no-write silence excludes required review findings', skill, /With no write, remain silent only if no required review findings or other allowed output need to be reported; required ambiguous\/review-only findings must not be suppressed merely because no write occurred/],
+  ['Session writes use the successful-write summary', sessionMode, /After actual writes, emit Step 4's concise summary of modified\/created file paths and validation-passed status/],
+  ['Session no-write silence excludes required review findings', sessionMode, /When there are no writes, stay silent only if no required review findings or other allowed output remain to be reported; required ambiguous\/review-only findings must not be suppressed merely because no write occurred/],
+];
+
+for (const [label, content, pattern] of focusedSafetyContracts) {
+  if (!pattern.test(content)) fail(`Focused safety contract is missing: ${label}.`);
 }
 
 const requiredEntryRoutes = [
@@ -244,7 +271,7 @@ const requiredInlineContracts = [
   ['concurrent modification before writes', /compare mtime with the value observed when reading; if it changed, warn and abort/],
   ['agent support files excluded by default', /Automatically scan deliverables, not agent support files/],
   ['whole-block removal', /Remove a multi-line leakage block as a whole/],
-  ['silent terminal behavior', /The last required tool result is terminal: send no assistant text afterward/],
+  ['silent terminal behavior', /On a silent path, the last required tool result is terminal: send no assistant text afterward/],
 ];
 
 for (const [label, pattern] of requiredInlineContracts) {

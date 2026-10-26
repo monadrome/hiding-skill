@@ -26,7 +26,7 @@ Evaluate each instruction in this order:
 4. Protect stable structure or required runtime text with a static check; never relocate runtime semantics into a checker.
 5. Remove it if it only repeats the description, enumerates familiar examples, explains ordinary model knowledge, or restates a contract already expressed more precisely elsewhere.
 
-Do not move an invariant behind a later route. A write-safety rule, for example, cannot live only in a reporting reference when successful writes are silent.
+Do not move an invariant behind a later route. A write-safety rule, for example, cannot live only in a cleanup follow-up reference that successful cleanup does not load.
 
 ## Reference Structure
 
@@ -64,7 +64,7 @@ Do not add rules for hypothetical mistakes that the baseline model handles relia
 8. Commit structure reductions and failure-driven behavior fixes separately.
 9. Repeat until another reduction would remove project-specific knowledge or high-consequence safeguards for negligible context savings.
 
-Credential assertions apply to user-visible output and written artifacts. A model must read a source credential to detect it, so hidden reasoning or raw tool transport is not itself an output leak.
+Credential assertions apply to user-visible output and written artifacts. A model must read a source credential to detect it, so hidden reasoning or raw tool transport is not itself a user-visible output leak. Session JSONL logs and API requests to the LLM may nevertheless cause actual exposure, so discovery must trigger the potentially-compromised rotation warning.
 
 ## Representative Scenarios
 
@@ -79,7 +79,7 @@ These are behavioral evaluation cases, not claims of measured accuracy. Run them
 | "Preview this session" with an unavailable session inventory | Report the limitation; do not substitute Git changes |
 | A worktree with code, AGENTS.md, agent progress state, and an uncertain note | Resolve the local base and exclude support and low-confidence files before reading content |
 | A preview containing a credential in a purge candidate | Write nothing; report only a redacted location and rotation warning; do not ask to delete |
-| A code comment selected for cleanup beside executable code, a TODO, and durable rationale | Remove only the leakage; preserve runtime content, useful rationale, line endings, and silent completion |
+| A code comment selected for cleanup beside executable code, a TODO, and durable rationale | Remove only the leakage; preserve runtime content, useful rationale, and line endings; after a successful write, report the modified path and validation-passed status |
 | A changed mtime or an occupied cleaned-copy destination | Abort concurrent writes; use a numbered output for collisions and report its name |
 
 ## Project Result

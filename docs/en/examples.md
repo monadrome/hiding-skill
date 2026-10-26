@@ -100,7 +100,7 @@ service:
 
 A format-safe placeholder is allowed only when the configuration remains structurally valid. A credential embedded in executable code is not silently changed; `/hide` reports the location for human review instead.
 
-Whenever a credential is found, including during a preview, `/hide` warns that the credential may need rotation. It never prints the discovered value in its report.
+Whenever a credential is found, including during a preview, `/hide` warns that reading or scanning may already have exposed its value in session JSONL logs or through API requests to the LLM. Treat it as potentially compromised and rotate it immediately. Reports never print the discovered value.
 
 ## 7. User-Specified Target
 
@@ -108,7 +108,7 @@ Whenever a credential is found, including during a preview, `/hide` warns that t
 /hide preview release-notes.md and remove the internal project name
 ```
 
-The target is interpreted semantically. Matching prose may be removed, but matches in identifiers, executable code, or behavior-affecting values are reported rather than changed.
+The target is interpreted semantically. Only high-confidence matches isolated in a complete comment or prose unit may be removed automatically; ambiguous matches are preserved and reported for review. Matches in identifiers, executable code, or behavior-affecting values are reported rather than changed.
 
 ## Verification
 
