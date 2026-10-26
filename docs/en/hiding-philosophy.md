@@ -85,9 +85,9 @@ Both dishes are the same. The second one tastes better.
 
 ## The Real Magic: Silence
 
-Here's the truly Fermat-esque part of `/hide`: after it runs, **you can't tell it ran**. There's no marker. No annotation. No `// cleaned by /hide`. No "5 instances of leakage removed." Nothing.
+Here's the truly Fermat-esque part of `/hide`: after it runs, **the selected file contains no sign that it ran**. There's no marker. No annotation. No `// cleaned by /hide`. No "5 instances of leakage removed."
 
-The selected file gets no cleanup marker. Previews, Session findings and choices, credential warnings, errors, and required confirmations remain visible. Git history, tool records, and copies outside the selected scope are not rewritten.
+The selected file gets no cleanup marker. Successful writes produce only a concise modified/created-path and validation-passed summary. Previews, Session findings and choices, credential warnings, errors, and required confirmations remain visible. Git history, tool records, and copies outside the selected scope are not rewritten.
 
 This is not a bug — it's the entire point. The illusion is that the file was always that clean. And if the illusion is perfect, it's not an illusion at all — it's just the file.
 

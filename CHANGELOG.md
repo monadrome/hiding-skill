@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Credential warnings now explain that reading or scanning may expose values in session JSONL logs or through API requests to the LLM, and require treating discovered credentials as potentially compromised and rotating them immediately.
+- Semantic-target cleanup now automatically removes only high-confidence, cleanly isolable comment/prose matches. Ambiguous matches remain unchanged and review-only in every mode, including previews and Session `Hide everything found`.
+- Successful writes now produce concise modified/created-file-path and validation-passed summaries without disclosing removed content, categories, or values. No-findings/no-write silence and cleanup follow-up reporting remain unchanged.
+
 ## [1.0.0] - 2026-10-22
 
 ### Changed

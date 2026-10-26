@@ -113,9 +113,9 @@ Restart Claude Code after installation. The native plugin command is `/hiding:hi
 3. **Classify** - Credentials are handled first, followed by file-level purge candidates, inline leakage, and user-specified targets.
 4. **Confirm** - Session review is human-in-the-loop. Whole-file deletion and symlink traversal always require explicit confirmation.
 5. **Clean** - Remove the smallest coherent comment or prose unit. Executable code, string literals, and behavior-affecting values are not silently changed.
-6. **Verify** - Re-read the candidate, validate structure, check for concurrent edits, then apply the selected output mode.
+6. **Verify** - Re-read the candidate, validate structure, check for concurrent edits, then apply the selected output mode. After successful writes, report only actual modified/created file paths and validation-passed status, not removed content, categories, or values.
 
-When there are no findings in direct file modes, `/hide` stays silent. Security warnings, previews, validation failures, and required intent clarifications remain visible.
+In direct file modes, `/hide` stays silent when there are no findings, no writes, and nothing else to report. Security warnings, previews, validation failures, successful-write summaries, and required intent clarifications remain visible.
 
 ## What's Inside
 
@@ -139,7 +139,7 @@ Describe one-off content goals anywhere in the request to augment the built-in s
 /hide preview report.md and remove data-source references plus the internal project name
 ```
 
-Targets are interpreted semantically, not as regular expressions. Quoting and fixed argument positions are not required. Matches in executable code, identifiers, or behavior-affecting configuration are reported for human review rather than modified automatically.
+Targets are interpreted semantically, not as regular expressions. Quoting and fixed argument positions are not required. Only high-confidence matches that can be isolated in the smallest complete comment or prose unit while preserving unrelated and durable technical content are removed automatically. Merely related, speculative, contextually uncertain, or non-isolable matches remain unchanged and are reported with `<file>:<line>` and a brief reason in every mode; they are review-only and excluded from automatic cleanup and Session `Hide everything found`. Matches in executable code, identifiers, or behavior-affecting configuration are reported for human review rather than modified automatically. Previews label automatically removable high-confidence matches as `would-remove` and ambiguous matches as `preserved/review-only`; zero matches add no separate per-target notices.
 
 ### File Selection
 
@@ -188,7 +188,7 @@ Credentials are scanned before any style cleanup or purge decision.
 - Secret values are redacted from reports.
 - Credentials in executable code are not silently edited.
 - Configuration credentials are replaced only when a format-safe placeholder preserves structure; otherwise they remain unchanged and are reported for human review.
-- If a credential may have been committed, pushed, or shared, rotate it even if the local file is cleaned.
+- Reading or scanning a credential may already have exposed its value in session JSONL logs or through API requests to the LLM. Treat discovered credentials as potentially compromised and rotate the affected credentials immediately, even if the local file is cleaned or left unchanged.
 
 `/hide` is defense in depth, not a replacement for a dedicated secret scanner.
 

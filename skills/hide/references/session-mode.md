@@ -29,10 +29,10 @@ For zero findings, including an empty inventory, say **"No AI leakage found in f
 
 Otherwise present Tier 0 first. Whenever credentials were found, include the outcome-neutral Step 1 rotation warning here, regardless of any later selection. It makes no claim about whether credentials have been removed and is not repeated in H4.
 
-Under preview intent, show per-file would-delete/would-clean findings and Tier 3 concerns, then stop. Do not offer execution choices or request cleanup or deletion confirmation.
+Under preview intent, show per-file would-delete/would-clean findings and Tier 3 concerns. Also show automatically removable high-confidence user-target matches as `would-remove` and ambiguous user-target matches as `preserved/review-only`, then stop. Do not offer execution choices or request cleanup or deletion confirmation.
 
-Without preview intent, present per-file delete/clean choices, Tier 3 concerns, `Hide everything found`, and `Nothing`. Use the runtime input mechanism or plain text and wait for explicit selection before H4.
+Without preview intent, present per-file delete/clean choices, Tier 3 concerns, `Hide everything found`, and `Nothing`. Show ambiguous user-target matches separately as preserved/review-only; never include them in clean choices or `Hide everything found`. Use the runtime input mechanism or plain text and wait for explicit selection before H4.
 
 ## Step H4: Execute User Choices
 
-Preview requests never reach H4. If the user selects `Nothing`, leave every file unchanged and stop; the credential warning has already been shown when applicable. Otherwise delete only after explicit confirmation; deletion ignores the requested output mode. Clean selected files with Steps 0-4 and the chosen output mode. Stay silent afterward except for required warnings.
+Preview requests never reach H4. If the user selects `Nothing`, leave every file unchanged and stop; the credential warning has already been shown when applicable. Otherwise delete only after explicit confirmation; deletion ignores the requested output mode. Clean selected files with Steps 0-4 and the chosen output mode. After actual writes, emit Step 4's concise summary of modified/created file paths and validation-passed status. When there are no writes, stay silent only if no required review findings or other allowed output remain to be reported; required ambiguous/review-only findings must not be suppressed merely because no write occurred.
